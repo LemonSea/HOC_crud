@@ -16,7 +16,6 @@ export const postLoginRequest = (Account, Password) => {
         "Account": Account,
         "Password": Password
     };
-    let newStatu;
     return (dispatch) => {
         axiosInstance({
             method: "POST",
