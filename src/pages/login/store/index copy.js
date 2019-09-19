@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, Alert } from 'antd';
 import './style.less';
 import { connect } from 'react-redux';
 import * as actionCreators from './store/actionCreators';
@@ -14,13 +14,15 @@ function Login(props) {
     const { postLoginDispatch } = props;
     // state to props
     const { loginStatus } = props;
+    console.log(props.form)
+
 
     useEffect(() => {
         if (loginStatus === false) {
             console.log(loginStatus)
             alert('账号密码错误！')
             // 将账号和密码置空
-            // setFieldsValue({ 'username': '', 'password': '' });
+            setFieldsValue({'username':'','password':''});
         }
     }, [loginStatus])
 

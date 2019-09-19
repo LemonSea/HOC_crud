@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const baseUrl = 'http://localhost:44305';
+export const baseUrl = 'https://localhost:44375';
 
 // 创建axios的实例
 const axiosInstance = axios.create({
