@@ -6,7 +6,7 @@ import * as actionCreators from './store/actionCreators';
 
 function Login(props) {
 
-    let Account, Password;
+    let FormData;
 
     // props.form
     const { getFieldDecorator, validateFields, getFieldValue, setFieldsValue } = props.form;
@@ -16,11 +16,11 @@ function Login(props) {
     const { loginStatus } = props;
 
     useEffect(() => {
-        if (loginStatus === false) {
+        if (loginStatus > 1) {
             console.log(loginStatus)
             alert('账号密码错误！')
-            // 将账号和密码置空
-            // setFieldsValue({ 'username': '', 'password': '' });
+        }else if(loginStatus === 0){
+            props.history.replace('/')
         }
     }, [loginStatus])
 
@@ -28,9 +28,14 @@ function Login(props) {
         e.preventDefault();
         validateFields((err, values) => {
             if (!err) {
-                Account = getFieldValue('username').replace(/\s*/g, "");
-                Password = getFieldValue('password').replace(/\s*/g, "");
-                postLoginDispatch(Account, Password)
+                // Account = getFieldValue('username').replace(/\s*/g, "");
+                // Password = getFieldValue('password').replace(/\s*/g, "");
+                const {account, password} = values;
+                FormData = {
+                    Account:account.replace(/\s*/g, ""),
+                    Password:password.replace(/\s*/g, "")
+                }
+                postLoginDispatch(FormData)
             }
         });
     };
@@ -44,12 +49,12 @@ function Login(props) {
                 <div className='title'>LOGIN</div>
                 <Form onSubmit={handleSubmit} className="login-form">
                     <Form.Item>
-                        {getFieldDecorator('username', {
+                        {getFieldDecorator('account', {
                             rules: [{ required: true, message: 'Please input your username!' }],
                         })(
                             <Input
                                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                placeholder="Username"
+                                placeholder="Account"
                             />,
                         )}
                     </Form.Item>
@@ -77,17 +82,16 @@ function Login(props) {
 
 const mapStateToProps = (state) => ({
     // 不要再这里将数据toJS,不然每次diff比对props的时候都是不一样的引用，还是导致不必要的重渲染, 属于滥用immutable
-    loginStatus: state.getIn(['login', 'loginStatus']),
+    loginStatus: state.getIn(['login','userItem', 'loginStatus']),
 })
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        postLoginDispatch(Account, Password) {
-            dispatch(actionCreators.postLoginRequest(Account, Password));
+        postLoginDispatch(FormData) {
+            dispatch(actionCreators.postLoginRequest(FormData));
         }
     }
 }
-
 
 const WrappedNormalLoginForm = Form.create()(Login);
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(WrappedNormalLoginForm))

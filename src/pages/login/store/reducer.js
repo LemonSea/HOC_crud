@@ -5,14 +5,19 @@ import { fromJS } from 'immutable';
 
 // 这里用到fromJS把JS数据结构转化成immutable数据结构
 const defaultState = fromJS({
-    User: [],
-    loginStatus: 1
+    userItem: {
+        user: [],
+        loginStatus: 1
+    }
 });
 
 export default (state = defaultState, action) => {
     switch (action.type) {
+        case actionTypes.USER_LOGIN:
+            return state.set('userItem', action.data);
         case actionTypes.CHANGE_LOGINSTATUS:
-            return state.set('loginStatus', action.data);
+            return state.updateIn(['userItem', 'loginStatus'], (x) => x + 1)
+
         default:
             return state;
     }

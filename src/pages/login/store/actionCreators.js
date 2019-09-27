@@ -6,32 +6,38 @@ import { fromJS } from 'immutable';
 // import { postLoginRequest } from '../../../api/request';
 import { axiosInstance } from "../../../api/config";
 
-export const changeLoginStatus = (data) => ({
-    type: actionTypes.CHANGE_LOGINSTATUS,
-    data: fromJS(data)
+export const userLogin = (data) => ({
+    type: actionTypes.USER_LOGIN,
+    data: fromJS({
+        user: data,
+        loginStatus: 0
+    })
 });
 
-export const postLoginRequest = (Account, Password) => {
-    let data = {
-        "Account": Account,
-        "Password": Password
-    };
+export const changeLoginState = () => ({
+    type: actionTypes.CHANGE_LOGINSTATUS
+});
+
+export const postLoginRequest = (FormData) => {
     return (dispatch) => {
         axiosInstance({
             method: "POST",
             headers: { 'Content-type': 'application/json', },
-            url: '/admin/Login/GetUserItem',
-            data: data,
-        })
-        .then((response) => {
-            // if(response === true){
-            //     newStatu = 0;
-            // }else{
-            //     newStatu = loginStatusJS++;
-            // }
-            dispatch(changeLoginStatus(response))
-        })
-        .catch((error) => {
+            url: '/admin/Login/Login',
+            data: FormData,
+        }).then((res) => {
+            console.log(res)
+            let data;
+            if (res.code === 200 && res.returnStatus === 1) {
+                // 登录成功
+                data = res.result;
+                console.log(data);
+                dispatch(userLogin(data))
+            } else if (res.code === 200 && res.returnStatus === 0) {
+                // 登录失败
+                dispatch(changeLoginState())
+            }
+        }).catch((error) => {
             console.log(error);//异常
         });
     }
