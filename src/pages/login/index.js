@@ -4,6 +4,7 @@ import './style.less';
 import { connect } from 'react-redux';
 import * as actionCreators from './store/actionCreators';
 
+
 function Login(props) {
 
     let FormData;
@@ -17,7 +18,6 @@ function Login(props) {
 
     useEffect(() => {
         if (loginStatus > 1) {
-            console.log(loginStatus)
             alert('账号密码错误！')
         }else if(loginStatus === 0){
             props.history.replace('/')

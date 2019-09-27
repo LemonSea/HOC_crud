@@ -4,6 +4,11 @@ import { combineReducers } from 'redux-immutable';
 import { reducer as loginReducer } from '../pages/login/store';
 
 // 合并 reducer 函数为一个 obj
-export default combineReducers({
+// export default  combineReducers({
+//     login: loginReducer
+// })
+const reducer = combineReducers({
     login: loginReducer
 })
+
+export default reducer

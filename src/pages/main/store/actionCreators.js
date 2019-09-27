@@ -5,7 +5,6 @@ import { fromJS } from 'immutable';
 // 导入网络请求
 // import { postLoginRequest } from '../../../api/request';
 import { axiosInstance } from "../../../api/config";
-import * as storageUser from '../../../utils/storageUser';
 
 export const userLogin = (data) => ({
     type: actionTypes.USER_LOGIN,
@@ -15,7 +14,7 @@ export const userLogin = (data) => ({
     })
 });
 
-const changeLoginState = () => ({
+export const changeLoginState = () => ({
     type: actionTypes.CHANGE_LOGINSTATUS
 });
 
@@ -31,8 +30,6 @@ export const postLoginRequest = (FormData) => {
             if (res.code === 200 && res.returnStatus === 1) {
                 // 登录成功
                 data = res.result;
-                storageUser.removeUser()
-                storageUser.setUser(data)
                 dispatch(userLogin(data))
             } else if (res.code === 200 && res.returnStatus === 0) {
                 // 登录失败

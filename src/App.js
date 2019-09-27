@@ -3,61 +3,22 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './assets/global-style.css';
 import { Provider } from 'react-redux';
-import store from './store/index';
+import  store  from './store/index';
 import Login from './pages/login';
 import Main from './pages/main';
 
-function App() {
-  // useEffect(() => {
-  //   axios.get('https://localhost:44375/admin/User/GetUserList')
-  //     .then((response) => {
-  //       console.log('原始get方法成功：')
-  //       console.log(response.data);//请求的返回体
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);//异常
-  //     });
-  // }, [])
-  // // useEffect(() => {
-  // //   axios(
-  // //     {
-  // //       methods: 'get',
-  // //       url: 'https://localhost:44375/admin/User/GetUserList',
-  // //     })
-  // //     .then((response) => {
-  // //       console.log('methods方法成功：')
-  // //       console.log(response.data);//请求的返回体
-  // //     })
-  // //     .catch((error) => {
-  // //       console.log(error);//异常
-  // //     });
-  // // }, [])
-  // useEffect(() => {
-  //   let data = {
-  //     "Account": "皮皮港",
-  //     "Password": "123456"
-  //   }
-  //   axios({
-  //     method: "POST",
-  //     headers: { 'Content-type': 'application/json', },
-  //     url: 'https://localhost:44375/admin/User/GetUserItem',
-  //     data: data,
-  //   })
-  //     .then((response) => {
-  //       console.log('发送成功：')
-  //       console.log(response.data);//请求的返回体
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);//异常
-  //     });
-  // }, [])
+// import { store, persistor } from './store/index';
+// import { PersistGate } from 'redux-persist/integration/react'
 
+function App() {
   return (
     <Provider store={store}>
-      <Router>
-        <Route path='/login' component={Login}></Route>
-        <Route path='/' exact component={Main}></Route>
-      </Router>
+      {/* <PersistGate loading={null} persistor={persistor} > */}
+        <Router>
+          <Route path='/login' component={Login}></Route>
+          <Route path='/' exact component={Main}></Route>
+        </Router>
+        {/* </PersistGate> */}
     </Provider>
   );
 }
