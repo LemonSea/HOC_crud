@@ -19,6 +19,15 @@ const changeLoginState = () => ({
     type: actionTypes.CHANGE_LOGINSTATUS
 });
 
+
+const changeLayoutState = () => ({
+    type: actionTypes.USER_LAYOUT,
+    data: fromJS({
+        user: [],
+        loginStatus: 1
+    })
+});
+
 export const postLoginRequest = (FormData) => {
     return (dispatch) => {
         axiosInstance({
@@ -41,5 +50,13 @@ export const postLoginRequest = (FormData) => {
         }).catch((error) => {
             console.log(error);//异常
         });
+    }
+}
+
+export const postLayoutRequest = () => {
+    return (dispatch) => {
+        console.log('creators')
+        storageUser.removeUser()
+        dispatch(changeLayoutState())
     }
 }

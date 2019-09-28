@@ -82,7 +82,7 @@ function Login(props) {
 
 const mapStateToProps = (state) => ({
     // 不要再这里将数据toJS,不然每次diff比对props的时候都是不一样的引用，还是导致不必要的重渲染, 属于滥用immutable
-    loginStatus: state.getIn(['login','userItem', 'loginStatus']),
+    loginStatus: state.getIn(['userList','userItem', 'loginStatus']),
 })
 
 const mapDispatchToProps = (dispatch) => {
