@@ -25,8 +25,8 @@ export default (state = defaultState, action) => {
     switch (action.type) {
         case actionTypes.USER_LOGIN:
             return state.set('userItem', action.data);
-            case actionTypes.USER_LAYOUT:
-                return state.set('userItem', action.data);
+        case actionTypes.USER_LAYOUT:
+            return state.set('userItem', action.data);
         case actionTypes.CHANGE_LOGINSTATUS:
             return state.updateIn(['userItem', 'loginStatus'], (x) => x + 1)
         default:

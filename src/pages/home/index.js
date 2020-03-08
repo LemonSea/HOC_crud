@@ -11,7 +11,7 @@ function Home(props) {
     // const userItemJS = userItem ? userItem.toJS() : [];
     return(        
         <div className='home-dav'>
-            欢迎使用文章管理系统
+            欢迎使用后台管理系统
         </div>
     )
 }

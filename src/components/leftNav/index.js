@@ -89,7 +89,7 @@ function LeftNav(props) {
         <div className='left-nav'>
             <Link to='/home' className='left-nav-header'>
                 <div className='left-nav-header-image'></div>
-                <h1>文章管理系统</h1>
+                <h1>后台管理系统</h1>
             </Link>
             <Menu
                 selectedKeys={[path]}
