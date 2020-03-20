@@ -22,7 +22,7 @@ export const getMenuList = (FormData) => {
         try {
             const result = await axiosInstance({
                 method: "GET",
-                url: 'authority'
+                url: 'authorities'
             })
             // console.log(result)
             if (result.status === 0) {
