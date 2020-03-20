@@ -58,6 +58,7 @@ export const postLoginRequest = (FormData) => {
 export const postLayoutRequest = () => {
     return (dispatch) => {
         storageUser.removeUser()
+        storageToken.removeToken()
         dispatch(changeLayoutState())
     }
 }

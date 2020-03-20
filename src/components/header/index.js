@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { actionCreators as layoutActionCreators } from '../../pages/login/store'
-import menuList from '../../config/menuConfig';
+// import menuList from '../../config/menuConfig';
 import './style.less';
 import { Modal } from 'antd';
 import LinkButton from '../../components/link-button';
@@ -15,6 +15,8 @@ function Header(props) {
     const { userItem } = props;
     const userItemJS = userItem ? userItem.toJS() : [];
     const userName = userItemJS.user.account;
+    const { list } = props;
+    const menuList = list ? list.toJS() : [];
     // console.log(userItemJS.user[0])
 
     // 获取标题
@@ -69,6 +71,7 @@ function Header(props) {
 
 const mapStateToProps = (state) => ({
     userItem: state.getIn(['userList', 'userItem']),
+    list: state.getIn(['menuList','menuList', 'menuList']),
 })
 
 const mapDispatchToProps = (dispatch) => {
