@@ -1,5 +1,5 @@
 import { axiosInstance } from "./config";
 
-export const postLoginRequest = () => {
-  return axiosInstance.psot('/admin/Login');
+export const aipRequest = () => {
+  return axiosInstance.psot('/api/v1');
 }

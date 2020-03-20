@@ -32,8 +32,8 @@ function Login(props) {
                 // Password = getFieldValue('password').replace(/\s*/g, "");
                 const {account, password} = values;
                 FormData = {
-                    Account:account.replace(/\s*/g, ""),
-                    Password:password.replace(/\s*/g, "")
+                    account:account.replace(/\s*/g, ""),
+                    password:password.replace(/\s*/g, "")
                 }
                 postLoginDispatch(FormData)
             }
@@ -43,7 +43,7 @@ function Login(props) {
     return (
         <div className='loginWrapper'>
             <div className='loginHeader'>
-                <h1>文章管理系统</h1>
+                <h1>家政后台管理系统</h1>
             </div>
             <div className='loginContent'>
                 <div className='title'>LOGIN</div>

@@ -14,7 +14,7 @@ function Header(props) {
     // state to props
     const { userItem } = props;
     const userItemJS = userItem ? userItem.toJS() : [];
-    const userName = userItemJS.user[0].realName
+    const userName = userItemJS.user.account;
     // console.log(userItemJS.user[0])
 
     // 获取标题

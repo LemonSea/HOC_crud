@@ -6,6 +6,7 @@ import { fromJS } from 'immutable';
 // import { postLoginRequest } from '../../../api/request';
 import { axiosInstance } from "../../../api/config";
 import * as storageUser from '../../../utils/storageUser';
+import * as storageToken from '../../../utils/storageToken';
 
 export const userLogin = (data) => ({
     type: actionTypes.USER_LOGIN,
@@ -29,33 +30,33 @@ const changeLayoutState = () => ({
 });
 
 export const postLoginRequest = (FormData) => {
-    return (dispatch) => {
-        axiosInstance({
-            method: "POST",
-            headers: { 'Content-type': 'application/json', },
-            url: '/admin/Login/Login',
-            data: FormData,
-        }).then((res) => {
-            let data;
-            if (res.code === 200 && res.returnStatus === 1) {
-                // 登录成功
-                data = res.result;
+    return async (dispatch) => {
+        try {
+            const reqAdminLogin = await axiosInstance({
+                method: "POST",
+                headers: { 'Content-type': 'application/json', },
+                url: 'users/admin/login',
+                data: FormData,
+            })
+            if (reqAdminLogin.status === 0) {
+                // 登录成功 
                 storageUser.removeUser()
-                storageUser.setUser(data)
-                dispatch(userLogin(data))
-            } else if (res.code === 200 && res.returnStatus === 0) {
+                storageToken.removeToken()
+                storageUser.setUser(reqAdminLogin.data)
+                storageToken.setToken(reqAdminLogin.token)
+                dispatch(userLogin(reqAdminLogin.data))
+            } else {
                 // 登录失败
                 dispatch(changeLoginState())
             }
-        }).catch((error) => {
-            console.log(error);//异常
-        });
+        } catch (error) {
+            console.log('请求出错！', error)
+        }
     }
 }
 
 export const postLayoutRequest = () => {
     return (dispatch) => {
-        console.log('creators')
         storageUser.removeUser()
         dispatch(changeLayoutState())
     }
