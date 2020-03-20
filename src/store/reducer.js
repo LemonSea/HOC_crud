@@ -2,6 +2,7 @@
 import { combineReducers } from 'redux-immutable';
 // 导入分仓库的 reducer
 import { reducer as loginReducer } from '../pages/login/store';
+import { reducer as menuList } from '../components/leftNav/store';
 // import { reducer as articleStatusReducer } from '../pages/articleManage/articleStatusManage/store';
 // import { reducer as articleTypeReducer } from '../pages/articleManage/articleTypeManage/store';
 
@@ -11,7 +12,8 @@ import { reducer as loginReducer } from '../pages/login/store';
 // })
 const reducer = combineReducers({
     // login: loginReducer,
-    userList: loginReducer
+    userList: loginReducer,
+    menuList: menuList
 })
 
 export default reducer

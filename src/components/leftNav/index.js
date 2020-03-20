@@ -4,16 +4,21 @@ import * as actionCreators from './store/actionCreators';
 import { Link, withRouter } from 'react-router-dom';
 import './style.less';
 import { Menu, Icon, Button } from 'antd';
-import menuList from '../../config/menuConfig';
+// import menuList from '../../config/menuConfig';
 
 const { SubMenu } = Menu;
 
 function LeftNav(props) {
     // dispatch to props
-    const { } = props;
+    const { getMenuList } = props;
     // state to props
-    const { } = props;
-    // const userItemJS = userItem ? userItem.toJS() : [];
+    const { list } = props;
+    const menuList = list ? list.toJS() : [];
+
+    useEffect(() => {
+        console.log('getMenuList')
+        getMenuList()
+    }, [])
 
     let path = props.location.pathname;
 
@@ -107,10 +112,14 @@ function LeftNav(props) {
 
 
 const mapStateToProps = (state) => ({
+    list: state.getIn(['menuList','menuList', 'menuList']),
 })
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        getMenuList() {
+            dispatch(actionCreators.getMenuList());
+        }
     }
 }
 

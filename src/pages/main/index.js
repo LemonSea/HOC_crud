@@ -12,6 +12,7 @@ import './style.less';
 */
 // 首页信息
 import Home from '../home';
+import Role from '../role/role';
 // // 账号信息
 // import AccountInfoManage from '../accountManage/accountInfoManage';
 // // 修改密码
@@ -63,6 +64,7 @@ function Main(props) {
                             <Route path='/articleTypeManage' component={ArticleTypeManage}></Route>
                             <Route path='/articleAudit' component={ArticleAudit}></Route>
                             <Route path='/articleWrite' component={ArticleWrite}></Route> */}
+                            <Route path='/role/role' component={Role}></Route>
                             {/* 如果上面没有匹配到，就返回Home */}
                             <Redirect to='/home' />
                         </Switch>
