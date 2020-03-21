@@ -12,12 +12,39 @@ const menuList = [
             {
                 "title": "角色管理",
                 "key": "/role/role",
-                "icon": "accountInfoManage"
+                "icon": "appstore"
             },
             {
                 "title": "权限管理",
-                "key": "/role/permissions",
-                "icon": "accountInfoManage"
+                "key": "/role/authority",
+                "icon": "appstore"
+            }]
+    },
+    {
+        "title": "公司",
+        "key": "/company",
+        "icon": "appstore",
+        "children": [
+            {
+                "title": "公司管理",
+                "key": "/company/list",
+                "icon": "appstore"
+            },
+            {
+                "title": "权限管理",
+                "key": "/role/authority",
+                "icon": "appstore"
+            }]
+    },
+    {
+        "title": "员工管理",
+        "key": "/staff",
+        "icon": "appstore",
+        "children": [
+            {
+                "title": "公司管理",
+                "key": "/staff/StaffStatus",
+                "icon": "appstore"
             }
         ]
     }

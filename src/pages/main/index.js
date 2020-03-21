@@ -14,6 +14,8 @@ import './style.less';
 import Home from '../home';
 import Role from '../role/role';
 import Authority from '../role/authority';
+import Company from '../company/company';
+import StaffStatus from '../staff/staffStatus/index';
 
 const { Footer, Sider, Content } = Layout;
 
@@ -38,6 +40,8 @@ function Main(props) {
                     <Content style={{ margin:20, backgroundColor: '#fff' }}>
                         <Switch>
                             <Route path='/home' component={Home}></Route>
+                            <Route path='/company/list' component={Company}></Route>
+                            <Route path='/staff/staffStatus' component={StaffStatus}></Route>
                             <Route path='/role/role' component={Role}></Route>
                             <Route path='/role/authority' component={Authority}></Route>
                             {/* 如果上面没有匹配到，就返回Home */}
