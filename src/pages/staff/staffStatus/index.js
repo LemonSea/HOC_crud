@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import * as actionCreators from './store/actionCreators';
 
 import { Card, Table, Button, Icon, Modal } from 'antd';
-import LinkButton from '../../../components/link-button'
+import LinkButton from '../../../components/link-button';
+
+import AddForm from './add-form';
 
 /*
   职员类型管理
@@ -11,7 +13,7 @@ import LinkButton from '../../../components/link-button'
 function StaffStatus(props) {
 
   // dispatch to props
-  const { getStaffStatusList} = props;
+  const { getStaffStatusList } = props;
   // dispathc to props by Modal
   const { showAdd, handleCancel, showEdit, addStaffStatus, editStaffStatus } = props;
 
@@ -54,7 +56,7 @@ function StaffStatus(props) {
       render: () => (  // 返回需要线上的界面标签
         <span>
           <LinkButton onClick={showEdit}>修改分类</LinkButton>
-          <LinkButton>查看分类</LinkButton>
+          <LinkButton>删除分类</LinkButton>
         </span>
       ),
     }
@@ -88,9 +90,7 @@ function StaffStatus(props) {
         onOk={addStaffStatus}
         onCancel={handleCancel}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <AddForm />
       </Modal>
 
       <Modal
@@ -99,13 +99,10 @@ function StaffStatus(props) {
         onOk={editStaffStatus}
         onCancel={handleCancel}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        修改分类
       </Modal>
     </Card>
   )
-
 }
 
 const mapStateToProps = (state) => ({
@@ -121,17 +118,17 @@ const mapDispatchToProps = (dispatch) => ({
   },
   handleCancel() {
     dispatch(actionCreators.handleCancel());
-  },  
+  },
   showAdd() {
     dispatch(actionCreators.showAdd());
   },
   showEdit() {
     dispatch(actionCreators.showEdit());
   },
-  addStaffStatus(){
+  addStaffStatus() {
     console.log('addStaffStatus')
   },
-  editStaffStatus(){
+  editStaffStatus() {
     console.log('editStaffStatus')
   },
 })
