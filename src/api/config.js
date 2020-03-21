@@ -5,20 +5,12 @@ import * as storageUser from '../utils/storageUser';
 
 export const baseUrl = 'http://localhost:8080/api/v1';
 
-const token  = storageToken.getToken()
-
 // 创建axios的实例
 const axiosInstance = axios.create({
   baseURL: baseUrl,
   validateStatus: function (status) {
     return status < 500; // 状态码在大于或等于500时才会 reject
   }
-});
-
-// token 验证
-const axiosAuthInstance = axios.create({
-  baseURL: baseUrl,
-  headers: {'x-auth-token': token},
 });
 
 // 响应拦截器【响应拦截器的作用是在接收到响应后进行一些操作】
@@ -31,6 +23,21 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+// token 验证
+const axiosAuthInstance = axios.create({
+  baseURL: baseUrl,
+  timeout: 5000,  // 请求超时时间
+});
+// request 拦截器
+axiosAuthInstance.interceptors.request.use(
+  config => {
+    config.headers = {'x-auth-token': storageToken.getToken()}
+    return config
+  },
+  err => {
+    return Promise.reject(err)
+  })
+// response 拦截器
 axiosAuthInstance.interceptors.response.use(
   res => {
     return res.data;
@@ -54,6 +61,7 @@ axiosAuthInstance.interceptors.response.use(
         console.log(status, text)
         storageToken.removeToken();
         storageUser.removeUser();
+        alert(text)
         window.location.href = 'http://localhost:3000/login';
       } else if (status === 403) {
         console.log(status, text)
