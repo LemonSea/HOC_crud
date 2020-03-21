@@ -16,7 +16,7 @@ function LeftNav(props) {
     const menuList = list ? list.toJS() : [];
 
     useEffect(() => {
-        console.log('getMenuList')
+        // console.log('getMenuList')
         getMenuList()
     }, [])
 

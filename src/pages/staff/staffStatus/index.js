@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from './store/actionCreators';
 
@@ -6,6 +6,7 @@ import { Card, Table, Button, Icon, Modal } from 'antd';
 import LinkButton from '../../../components/link-button';
 
 import AddForm from './add-form';
+import EditForm from './edit-form';
 
 /*
   职员类型管理
@@ -20,6 +21,8 @@ function StaffStatus(props) {
   // state to props
   const { staffStatusList, loading, showStatus } = props;
   const staffStatusListJS = staffStatusList ? staffStatusList.toJS() : [];
+
+  const [item, setItem] = useState({});
 
   useEffect(() => {
     console.log('getMenuList')
@@ -53,9 +56,13 @@ function StaffStatus(props) {
     {
       title: '操作',
       width: 300,
-      render: () => (  // 返回需要线上的界面标签
+      render: (item) => (  // 返回需要线上的界面标签
         <span>
-          <LinkButton onClick={showEdit}>修改分类</LinkButton>
+          <LinkButton onClick={() => {
+            showEdit();
+            setItem(item)
+          }
+          }>修改分类</LinkButton>
           <LinkButton>删除分类</LinkButton>
         </span>
       ),
@@ -99,7 +106,9 @@ function StaffStatus(props) {
         onOk={editStaffStatus}
         onCancel={handleCancel}
       >
-        修改分类
+        <EditForm
+          item={item}
+        />
       </Modal>
     </Card>
   )
@@ -110,6 +119,7 @@ const mapStateToProps = (state) => ({
   staffStatusList: state.getIn(['staffStatusList', 'staffStatusList', 'staffStatusList']),
   loading: state.getIn(['staffStatusList', 'staffStatusList', 'loading']),
   showStatus: state.getIn(['staffStatusList', 'showStatus']),
+  item: state.getIn(['staffStatusList', 'showStatus'])
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -119,12 +129,14 @@ const mapDispatchToProps = (dispatch) => ({
   handleCancel() {
     dispatch(actionCreators.handleCancel());
   },
+
   showAdd() {
     dispatch(actionCreators.showAdd());
   },
   showEdit() {
     dispatch(actionCreators.showEdit());
   },
+
   addStaffStatus() {
     console.log('addStaffStatus')
   },

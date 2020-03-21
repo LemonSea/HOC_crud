@@ -4,8 +4,7 @@ import * as actionTypes from './constants';
 import { fromJS } from 'immutable';
 // 导入网络请求
 // import { postLoginRequest } from '../../../api/request';
-import { axiosInstance } from "../../../../api/config";
-
+import { axiosInstance, axiosAuthInstance } from "../../../../api/config";
 const getList = (data) => ({
     type: actionTypes.GET_LIST,
     data: fromJS({
@@ -31,9 +30,9 @@ const showEditStatus = () => ({
 export const getStaffStatusList = () => {
     return async (dispatch) => {
         try {
-            const result = await axiosInstance({
+            const result = await axiosAuthInstance({
                 method: "GET",
-                url: 'staffStatus'
+                url: 'staffStatus',
             })
             if (result.status === 0) {
                 dispatch(getList(result.data))

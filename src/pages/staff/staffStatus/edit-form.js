@@ -6,7 +6,7 @@ import {
   Icon
 } from 'antd';
 
-function AddForm(props) {
+function EditForm(props) {
 
   let FormData;
 
@@ -15,12 +15,13 @@ function AddForm(props) {
   // dispatch to props
   const { } = props;
   // state to props
-  const { creator } = props;
-  // 获得当前用户
-  const creatorJS = creator ? creator.toJS() : [];
+  const { } = props;
+
+  // 当前选中项
+  const item = props.item;
 
   return (
-    <Form>
+    <Form >
       <Form.Item>
         {getFieldDecorator('name', {
           initialValue: ''
@@ -41,7 +42,6 @@ function AddForm(props) {
 
 
 const mapStateToProps = (state) => ({
-  creator: state.getIn(['userList', 'userItem','user'])
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -49,5 +49,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const WrappedNormalAddForm = Form.create()(AddForm);
+const WrappedNormalAddForm = Form.create()(EditForm);
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(WrappedNormalAddForm))
