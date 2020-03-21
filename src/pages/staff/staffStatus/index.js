@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from './store/actionCreators';
 
-import { Card, Table, Button, Icon } from 'antd';
+import { Card, Table, Button, Icon, Modal } from 'antd';
 import LinkButton from '../../../components/link-button'
 
 /*
@@ -11,10 +11,12 @@ import LinkButton from '../../../components/link-button'
 function StaffStatus(props) {
 
   // dispatch to props
-  const { getStaffStatusList } = props;
+  const { getStaffStatusList} = props;
+  // dispathc to props by Modal
+  const { showAdd, handleCancel, showEdit, addStaffStatus, editStaffStatus } = props;
 
   // state to props
-  const { staffStatusList } = props;
+  const { staffStatusList, loading, showStatus } = props;
   const staffStatusListJS = staffStatusList ? staffStatusList.toJS() : [];
 
   useEffect(() => {
@@ -22,9 +24,9 @@ function StaffStatus(props) {
     getStaffStatusList()
   }, [])
 
+  // list 内容
   const dataSource = staffStatusListJS;
- 
-
+  // list 标题
   const columns = [
     {
       title: '类型',
@@ -37,6 +39,11 @@ function StaffStatus(props) {
       key: 'describe',
     },
     {
+      title: '创建者',
+      dataIndex: 'creator',
+      key: 'creator',
+    },
+    {
       title: '创建时间',
       dataIndex: 'createTime',
       key: 'createTime',
@@ -46,7 +53,7 @@ function StaffStatus(props) {
       width: 300,
       render: () => (  // 返回需要线上的界面标签
         <span>
-          <LinkButton>修改分类</LinkButton>
+          <LinkButton onClick={showEdit}>修改分类</LinkButton>
           <LinkButton>查看分类</LinkButton>
         </span>
       ),
@@ -58,7 +65,7 @@ function StaffStatus(props) {
   const title = '员工类型';
   // card 的右侧
   const extra = (
-    <Button type='primary'>
+    <Button type='primary' onClick={showAdd}>
       <Icon type='plus'></Icon>
         添加
     </Button>
@@ -69,9 +76,33 @@ function StaffStatus(props) {
       <Table
         bordered={true}
         rowKey='_id'
+        loading={loading}
         dataSource={dataSource}
         columns={columns}
+        pagination={{ defaultPageSize: 5, showQuickJumper: true }}
       />;
+
+      <Modal
+        title="添加分类"
+        visible={showStatus === 1}
+        onOk={addStaffStatus}
+        onCancel={handleCancel}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
+
+      <Modal
+        title="修改分类"
+        visible={showStatus === 2}
+        onOk={editStaffStatus}
+        onCancel={handleCancel}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
     </Card>
   )
 
@@ -80,12 +111,29 @@ function StaffStatus(props) {
 const mapStateToProps = (state) => ({
   // 不要再这里将数据toJS,不然每次diff比对props的时候都是不一样的引用，还是导致不必要的重渲染, 属于滥用immutable
   staffStatusList: state.getIn(['staffStatusList', 'staffStatusList', 'staffStatusList']),
+  loading: state.getIn(['staffStatusList', 'staffStatusList', 'loading']),
+  showStatus: state.getIn(['staffStatusList', 'showStatus']),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   getStaffStatusList() {
     dispatch(actionCreators.getStaffStatusList());
-  }
+  },
+  handleCancel() {
+    dispatch(actionCreators.handleCancel());
+  },  
+  showAdd() {
+    dispatch(actionCreators.showAdd());
+  },
+  showEdit() {
+    dispatch(actionCreators.showEdit());
+  },
+  addStaffStatus(){
+    console.log('addStaffStatus')
+  },
+  editStaffStatus(){
+    console.log('editStaffStatus')
+  },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(StaffStatus))
