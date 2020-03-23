@@ -8,7 +8,7 @@ import {
 
 function EditForm(props) {
 
-  let FormData;
+  let formData;
 
   // props.form
   const { getFieldDecorator, validateFields, getFieldValue, setFieldsValue } = props.form;
@@ -17,21 +17,34 @@ function EditForm(props) {
   // state to props
   const { } = props;
 
-  // 当前选中项
-  const item = props.item;
+  // admin / item
+  const { item, admin, setForm, setFormData } = props;
+  // console.log(item)
+  // console.log(admin)
+
+  useEffect(() => {
+    setForm(props.form);
+    return () => {
+      formData = {
+        name: getFieldValue('name'),
+        describe: getFieldValue('describe')
+      }
+      setFormData(formData)
+    }
+  }, [])
 
   return (
     <Form >
       <Form.Item>
         {getFieldDecorator('name', {
-          initialValue: ''
+          initialValue: item.name
         })(
           <Input placeholder="输入员工类别名" />,
         )}
       </Form.Item>
       <Form.Item>
         {getFieldDecorator('describe', {
-          initialValue: ''
+          initialValue: item.describe
         })(
           <Input placeholder="输入类别描述" />,
         )}

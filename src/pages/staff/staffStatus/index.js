@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from './store/actionCreators';
 
@@ -19,13 +19,17 @@ function StaffStatus(props) {
   const { showAdd, handleCancel, showEdit, addStaffStatus, editStaffStatus } = props;
 
   // state to props
-  const { staffStatusList, loading, showStatus } = props;
+  const { staffStatusList, loading, showStatus, creator } = props;
   const staffStatusListJS = staffStatusList ? staffStatusList.toJS() : [];
+  const creatorJS = creator ? creator.toJS() : {};
 
   const [item, setItem] = useState({});
+  const [admin, setAdmin] = useState({});
+  const [form, setForm] = useState({});
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    console.log('getMenuList')
+    // console.log('getMenuList')
     getStaffStatusList()
   }, [])
 
@@ -60,7 +64,8 @@ function StaffStatus(props) {
         <span>
           <LinkButton onClick={() => {
             showEdit();
-            setItem(item)
+            setItem(item);
+            setAdmin(creatorJS)
           }
           }>修改分类</LinkButton>
           <LinkButton>删除分类</LinkButton>
@@ -74,7 +79,10 @@ function StaffStatus(props) {
   const title = '员工类型';
   // card 的右侧
   const extra = (
-    <Button type='primary' onClick={showAdd}>
+    <Button type='primary' onClick={() => {
+      showAdd();
+      setAdmin(creatorJS)
+    }} >
       <Icon type='plus'></Icon>
         添加
     </Button>
@@ -94,20 +102,25 @@ function StaffStatus(props) {
       <Modal
         title="添加分类"
         visible={showStatus === 1}
-        onOk={addStaffStatus}
-        onCancel={handleCancel}
+        onOk={() => { addStaffStatus(admin) }}
+        onCancel={() => { handleCancel(form) }}
       >
-        <AddForm />
+        <AddForm
+          admin={admin}
+        />
       </Modal>
 
       <Modal
         title="修改分类"
         visible={showStatus === 2}
-        onOk={editStaffStatus}
-        onCancel={handleCancel}
+        onOk={() => { editStaffStatus(admin, form, formData) }}
+        onCancel={() => { handleCancel(form) }}
       >
         <EditForm
           item={item}
+          admin={admin}
+          setForm={(form) => { setForm(form) }}
+          setFormData={(formData) => { setFormData(formData) }}
         />
       </Modal>
     </Card>
@@ -116,20 +129,25 @@ function StaffStatus(props) {
 
 const mapStateToProps = (state) => ({
   // 不要再这里将数据toJS,不然每次diff比对props的时候都是不一样的引用，还是导致不必要的重渲染, 属于滥用immutable
+  // staff status's list
   staffStatusList: state.getIn(['staffStatusList', 'staffStatusList', 'staffStatusList']),
+  // list loading ...
   loading: state.getIn(['staffStatusList', 'staffStatusList', 'loading']),
+  // modal show status
   showStatus: state.getIn(['staffStatusList', 'showStatus']),
-  item: state.getIn(['staffStatusList', 'showStatus'])
+  // current admin
+  creator: state.getIn(['userList', 'userItem', 'user'])
 })
 
 const mapDispatchToProps = (dispatch) => ({
   getStaffStatusList() {
     dispatch(actionCreators.getStaffStatusList());
   },
-  handleCancel() {
+
+  handleCancel(form) {
+    form.resetFields()
     dispatch(actionCreators.handleCancel());
   },
-
   showAdd() {
     dispatch(actionCreators.showAdd());
   },
@@ -138,10 +156,15 @@ const mapDispatchToProps = (dispatch) => ({
   },
 
   addStaffStatus() {
-    console.log('addStaffStatus')
+    console.log('addStaffStatus');
+    dispatch(actionCreators.addStaffStatus());
   },
-  editStaffStatus() {
-    console.log('editStaffStatus')
+  editStaffStatus(admin, form, formData) {
+    form.resetFields();
+    formData['creator'] = admin._id;
+    console.log(form);
+    console.log(formData)
+    // dispatch(actionCreators.editStaffStatus(formData));
   },
 })
 

@@ -5,6 +5,7 @@ import { fromJS } from 'immutable';
 // 导入网络请求
 // import { postLoginRequest } from '../../../api/request';
 import { axiosInstance, axiosAuthInstance } from "../../../../api/config";
+
 const getList = (data) => ({
     type: actionTypes.GET_LIST,
     data: fromJS({
@@ -22,6 +23,14 @@ const showAddStatus = () => ({
     data: 1
 });
 const showEditStatus = () => ({
+    type: actionTypes.SHOWADD_STATUS,
+    data: 2
+});
+// const showEditStatus = () => ({
+//     type: actionTypes.SHOWADD_STATUS,
+//     data: 2
+// });
+const setEditStaffStatus = () => ({
     type: actionTypes.SHOWADD_STATUS,
     data: 2
 });
@@ -61,6 +70,35 @@ export const showAdd = () => {
 export const showEdit = () => {
     return (dispatch) => {
         dispatch(showEditStatus())
+    }
+}
+
+// 添加内容
+export const addStaffStatus = () => {    
+    return (dispatch) => {
+        dispatch(handleCancelStatus())
+    }
+}
+export const editStaffStatus = (formData) => {    
+    return (dispatch) => {
+        try {
+            // const req = await axiosAuthInstance({
+            //     method: "POST",
+            //     headers: { 'Content-type': 'application/json', },
+            //     url: 'staffStatus',
+            //     data: formData,
+            // })
+            // if (req.status === 0) {
+            //     console.log(req)
+            //     dispatch(setEditStaffStatus())
+            // } else {
+            //     alert('修改失败！')
+            //     dispatch(handleCancelStatus())
+            // }
+            console.log(formData)
+        } catch (error) {
+            console.log('请求出错！', error)
+        }
     }
 }
 

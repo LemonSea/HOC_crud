@@ -15,9 +15,11 @@ function AddForm(props) {
   // dispatch to props
   const { } = props;
   // state to props
-  const { creator } = props;
-  // 获得当前用户
-  const creatorJS = creator ? creator.toJS() : [];
+  const { } = props;
+  // const creatorJS = creator ? creator.toJS() : [];
+
+  const { admin } = props;
+  console.log(admin)
 
   return (
     <Form>
@@ -41,7 +43,6 @@ function AddForm(props) {
 
 
 const mapStateToProps = (state) => ({
-  creator: state.getIn(['userList', 'userItem','user'])
 })
 
 const mapDispatchToProps = (dispatch) => {
