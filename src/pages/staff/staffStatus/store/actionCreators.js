@@ -26,14 +26,16 @@ const showEditStatus = () => ({
     type: actionTypes.SHOWADD_STATUS,
     data: 2
 });
-// const showEditStatus = () => ({
-//     type: actionTypes.SHOWADD_STATUS,
-//     data: 2
-// });
-const setEditStaffStatus = () => ({
-    type: actionTypes.SHOWADD_STATUS,
-    data: 2
+
+const setEditStaffStatus = (data) => ({
+    type: actionTypes.UPDATE_LIST,
+    data: data
 });
+
+const currentObj = (item) => ({
+    type: actionTypes.CURRENT_OBJ,
+    data: item
+})
 
 // 获取list数据
 export const getStaffStatusList = () => {
@@ -73,29 +75,84 @@ export const showEdit = () => {
     }
 }
 
-// 添加内容
-export const addStaffStatus = () => {    
+// 保存分类对象
+export const saveCurrentObj = (item) => {
     return (dispatch) => {
-        dispatch(handleCancelStatus())
+        dispatch(currentObj(item));
     }
 }
-export const editStaffStatus = (formData) => {    
-    return (dispatch) => {
+
+// 添加内容
+export const addStaffStatus = (data) => {
+    return async (dispatch) => {
         try {
-            // const req = await axiosAuthInstance({
-            //     method: "POST",
-            //     headers: { 'Content-type': 'application/json', },
-            //     url: 'staffStatus',
-            //     data: formData,
-            // })
-            // if (req.status === 0) {
-            //     console.log(req)
-            //     dispatch(setEditStaffStatus())
-            // } else {
-            //     alert('修改失败！')
-            //     dispatch(handleCancelStatus())
-            // }
-            console.log(formData)
+            const req = await axiosAuthInstance({
+                method: "POST",
+                headers: { 'Content-type': 'application/json', },
+                url: 'staffStatus',
+                data: {
+                    data
+                },
+            })
+            if (req.status === 0) {
+                console.log(req)
+                // dispatch(setEditStaffStatus(req.data.record))
+                dispatch(handleCancelStatus())
+            } else {
+                alert('修改失败！')
+                dispatch(handleCancelStatus())
+            }
+        } catch (error) {
+            console.log('请求出错！', error)
+        }
+    }
+}
+// 修改内容
+export const editStaffStatus = (_id, formData) => {
+    return async (dispatch) => {
+        try {
+            const req = await axiosAuthInstance({
+                method: "PUT",
+                headers: { 'Content-type': 'application/json', },
+                url: 'staffStatus',
+                data: {
+                    _id: _id,
+                    data: formData
+                },
+            })
+            if (req.status === 0) {
+                console.log(req)
+                // dispatch(setEditStaffStatus(req.data.record))
+                dispatch(handleCancelStatus())
+            } else {
+                alert('修改失败！')
+                dispatch(handleCancelStatus())
+            }
+        } catch (error) {
+            console.log('请求出错！', error)
+        }
+    }
+}
+// 修改内容
+export const deleteById = (_id) => {
+    return async (dispatch) => {
+        try {
+            const req = await axiosAuthInstance({
+                method: "DELETE",
+                headers: { 'Content-type': 'application/json', },
+                url: 'staffStatus',
+                data: {
+                    "id": _id
+                }
+            })
+            if (req.status === 0) {
+                console.log(req)
+                // dispatch(setEditStaffStatus(req.data.record))
+                dispatch(handleCancelStatus())
+            } else {
+                alert('修改失败！')
+                dispatch(handleCancelStatus())
+            }
         } catch (error) {
             console.log('请求出错！', error)
         }

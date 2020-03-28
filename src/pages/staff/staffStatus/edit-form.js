@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Form,
@@ -6,32 +6,23 @@ import {
   Icon
 } from 'antd';
 
-function EditForm(props) {
+class EditForm extends Component {
 
-  let formData;
+  componentDidMount() {
+    this.props.setForm(this.props.form)
+  }
+
+  render() {
 
   // props.form
-  const { getFieldDecorator, validateFields, getFieldValue, setFieldsValue } = props.form;
+  const { getFieldDecorator, validateFields, getFieldValue, setFieldsValue } = this.props.form;
   // dispatch to props
-  const { } = props;
+  const { } = this.props;
   // state to props
-  const { } = props;
+  const { } = this.props;
 
-  // admin / item
-  const { item, admin, setForm, setFormData } = props;
-  // console.log(item)
-  // console.log(admin)
-
-  useEffect(() => {
-    setForm(props.form);
-    return () => {
-      formData = {
-        name: getFieldValue('name'),
-        describe: getFieldValue('describe')
-      }
-      setFormData(formData)
-    }
-  }, [])
+  const { item } = this.props;
+  // console.log('item', item)
 
   return (
     <Form >
@@ -52,6 +43,7 @@ function EditForm(props) {
     </Form>
   )
 }
+}
 
 
 const mapStateToProps = (state) => ({
@@ -62,5 +54,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const WrappedNormalAddForm = Form.create()(EditForm);
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(WrappedNormalAddForm))
+const WrappedNormalForm = Form.create()(EditForm);
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(WrappedNormalForm))

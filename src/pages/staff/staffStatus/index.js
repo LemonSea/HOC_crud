@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actionCreators from './store/actionCreators';
+import { actionCreators } from './store';
 
 import { Card, Table, Button, Icon, Modal } from 'antd';
 import LinkButton from '../../../components/link-button';
@@ -11,120 +11,130 @@ import EditForm from './edit-form';
 /*
   职员类型管理
 */
-function StaffStatus(props) {
+class StaffStatus extends Component {
 
-  // dispatch to props
-  const { getStaffStatusList } = props;
-  // dispathc to props by Modal
-  const { showAdd, handleCancel, showEdit, addStaffStatus, editStaffStatus } = props;
+  // table 标题
+  initColumns = () => {
+    this.columns = [
+      {
+        title: '类型',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '描述',
+        dataIndex: 'describe',
+        key: 'describe',
+      },
+      {
+        title: '创建者',
+        dataIndex: 'creator',
+        key: 'creator',
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createTime',
+        key: 'createTime',
+      },
+      {
+        title: '操作',
+        width: 300,
+        render: (item) => (  // 返回需要线上的界面标签
+          <span>
+            <LinkButton onClick={() => {
+              this.props.showEdit(item)
+            }
+            }>修改分类</LinkButton>
+            <LinkButton onClick={() => {
+              this.props.deleteById(item)
+              this.props.getStaffStatusList();
+            }
+            }>删除分类</LinkButton>
+          </span>
+        ),
+      }
+    ];
+  }
 
-  // state to props
-  const { staffStatusList, loading, showStatus, creator } = props;
-  const staffStatusListJS = staffStatusList ? staffStatusList.toJS() : [];
-  const creatorJS = creator ? creator.toJS() : {};
+  componentWillMount() {
+    // list 标题
+    this.initColumns()
+  }
 
-  const [item, setItem] = useState({});
-  const [admin, setAdmin] = useState({});
-  const [form, setForm] = useState({});
-  const [formData, setFormData] = useState({});
+  componentDidMount() {
+    this.props.getStaffStatusList()
+  }
 
-  useEffect(() => {
-    // console.log('getMenuList')
-    getStaffStatusList()
-  }, [])
+  render() {
+    // dispatch to props
+    const { getStaffStatusList } = this.props;
+    // dispathc to props by Modal
+    const { showAdd, handleCancel, showEdit, addStaffStatus, editStaffStatus, deleteById } = this.props;
 
-  // list 内容
-  const dataSource = staffStatusListJS;
-  // list 标题
-  const columns = [
-    {
-      title: '类型',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '描述',
-      dataIndex: 'describe',
-      key: 'describe',
-    },
-    {
-      title: '创建者',
-      dataIndex: 'creator',
-      key: 'creator',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime',
-      key: 'createTime',
-    },
-    {
-      title: '操作',
-      width: 300,
-      render: (item) => (  // 返回需要线上的界面标签
-        <span>
-          <LinkButton onClick={() => {
-            showEdit();
-            setItem(item);
-            setAdmin(creatorJS)
-          }
-          }>修改分类</LinkButton>
-          <LinkButton>删除分类</LinkButton>
-        </span>
-      ),
-    }
-  ];
+    // state to props
+    const { staffStatusList, loading, showStatus, creator, currentObj } = this.props;
+    const staffStatusListJS = staffStatusList ? staffStatusList.toJS() : [];
+    const creatorJS = creator ? creator.toJS() : {};
+    // const currentObjJS = currentObj ? currentObj.toJS() : {};
+    // console.log(currentObj)
 
+    // list 内容
+    const dataSource = staffStatusListJS;
 
-  // card 的左侧标题
-  const title = '员工类型';
-  // card 的右侧
-  const extra = (
-    <Button type='primary' onClick={() => {
-      showAdd();
-      setAdmin(creatorJS)
-    }} >
-      <Icon type='plus'></Icon>
+    // card 的左侧标题
+    const title = '员工类型';
+    // card 的右侧
+    const extra = (
+      <Button type='primary' onClick={() => {
+        showAdd()
+      }} >
+        <Icon type='plus'></Icon>
         添加
-    </Button>
-  )
+      </Button>
+    )
 
-  return (
-    <Card title={title} extra={extra}>
-      <Table
-        bordered={true}
-        rowKey='_id'
-        loading={loading}
-        dataSource={dataSource}
-        columns={columns}
-        pagination={{ defaultPageSize: 5, showQuickJumper: true }}
-      />;
+    return (
+      <Card title={title} extra={extra}>
+        <Table
+          bordered={true}
+          rowKey='_id'
+          loading={loading}
+          dataSource={dataSource}
+          columns={this.columns}
+          pagination={{ defaultPageSize: 5, showQuickJumper: true }}
+        />;
 
-      <Modal
-        title="添加分类"
-        visible={showStatus === 1}
-        onOk={() => { addStaffStatus(admin) }}
-        onCancel={() => { handleCancel(form) }}
-      >
-        <AddForm
-          admin={admin}
-        />
-      </Modal>
+        <Modal
+          title="添加分类"
+          visible={showStatus === 1}
+          onOk={() => {
+            addStaffStatus(creatorJS, this.form);
+            getStaffStatusList();
+          }}
+          onCancel={() => { handleCancel(this.form) }}
+        >
+          <AddForm
+            setForm={(form) => { this.form = form }}
+          />
+        </Modal>
 
-      <Modal
-        title="修改分类"
-        visible={showStatus === 2}
-        onOk={() => { editStaffStatus(admin, form, formData) }}
-        onCancel={() => { handleCancel(form) }}
-      >
-        <EditForm
-          item={item}
-          admin={admin}
-          setForm={(form) => { setForm(form) }}
-          setFormData={(formData) => { setFormData(formData) }}
-        />
-      </Modal>
-    </Card>
-  )
+        <Modal
+          title="修改分类"
+          visible={showStatus === 2}
+          onOk={() => {
+            editStaffStatus(currentObj._id, creatorJS, this.form);
+            getStaffStatusList();
+          }}
+          onCancel={() => { handleCancel(this.form) }}
+        >
+          <EditForm
+            item={currentObj}
+            setForm={(form) => { this.form = form }}
+          />
+        </Modal>
+      </Card>
+    )
+  }
 }
 
 const mapStateToProps = (state) => ({
@@ -136,7 +146,9 @@ const mapStateToProps = (state) => ({
   // modal show status
   showStatus: state.getIn(['staffStatusList', 'showStatus']),
   // current admin
-  creator: state.getIn(['userList', 'userItem', 'user'])
+  creator: state.getIn(['userList', 'userItem', 'user']),
+  // current admin
+  currentObj: state.getIn(['staffStatusList', 'currentObj']),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -145,27 +157,41 @@ const mapDispatchToProps = (dispatch) => ({
   },
 
   handleCancel(form) {
-    form.resetFields()
     dispatch(actionCreators.handleCancel());
+    form.resetFields();
   },
   showAdd() {
     dispatch(actionCreators.showAdd());
   },
-  showEdit() {
+  showEdit(item) {
     dispatch(actionCreators.showEdit());
+    dispatch(actionCreators.saveCurrentObj(item));
   },
 
-  addStaffStatus() {
-    console.log('addStaffStatus');
-    dispatch(actionCreators.addStaffStatus());
-  },
-  editStaffStatus(admin, form, formData) {
+  addStaffStatus(creator, form) {
+    const formDate = {
+      name: form.getFieldValue('name'),
+      describe: form.getFieldValue('describe'),
+      creator: creator._id
+    }
+    dispatch(actionCreators.addStaffStatus(formDate));
     form.resetFields();
-    formData['creator'] = admin._id;
-    console.log(form);
-    console.log(formData)
-    // dispatch(actionCreators.editStaffStatus(formData));
+    dispatch(actionCreators.handleCancel());
   },
+  editStaffStatus(_id, creator, form) {
+    const formDate = {
+      name: form.getFieldValue('name'),
+      describe: form.getFieldValue('describe'),
+      creator: creator._id
+    }
+    dispatch(actionCreators.editStaffStatus(_id, formDate));
+    form.resetFields();
+    dispatch(actionCreators.handleCancel());
+  },
+  deleteById(item){
+    console.log(item._id)
+    dispatch(actionCreators.deleteById(item._id));
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(StaffStatus))

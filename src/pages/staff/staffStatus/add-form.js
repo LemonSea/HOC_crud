@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Form,
@@ -6,23 +6,23 @@ import {
   Icon
 } from 'antd';
 
-function AddForm(props) {
+class AddForm extends Component {
 
-  let FormData;
+  componentDidMount() {
+    this.props.setForm(this.props.form)
+  }
+
+  render() {
 
   // props.form
-  const { getFieldDecorator, validateFields, getFieldValue, setFieldsValue } = props.form;
+  const { getFieldDecorator, validateFields, getFieldValue, setFieldsValue } = this.props.form;
   // dispatch to props
-  const { } = props;
+  const { } = this.props;
   // state to props
-  const { } = props;
-  // const creatorJS = creator ? creator.toJS() : [];
-
-  const { admin } = props;
-  console.log(admin)
+  const { } = this.props;
 
   return (
-    <Form>
+    <Form >
       <Form.Item>
         {getFieldDecorator('name', {
           initialValue: ''
@@ -40,6 +40,7 @@ function AddForm(props) {
     </Form>
   )
 }
+}
 
 
 const mapStateToProps = (state) => ({
@@ -50,5 +51,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const WrappedNormalAddForm = Form.create()(AddForm);
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(WrappedNormalAddForm))
+const WrappedNormalForm = Form.create()(AddForm);
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(WrappedNormalForm))
