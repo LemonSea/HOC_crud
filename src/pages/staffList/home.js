@@ -90,10 +90,9 @@ class StaffHome extends Component {
               onClick={() => this.props.history.push('/staff/staff/detail', { item })}
             >详情</LinkButton>
 
-            <LinkButton onClick={() => {
-              // this.props.showEdit(item)
-            }
-            }>修改</LinkButton>
+            <LinkButton 
+              onClick={() => this.props.history.push('/staff/staff/addUpdate', { item })}
+            >修改</LinkButton>
             <LinkButton onClick={() => {
               // this.props.deleteById(item)
               // this.props.getStaffStatusList();
