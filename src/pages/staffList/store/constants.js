@@ -5,3 +5,4 @@ export const SHOWADD_STATUS = 'admin/staff/SHOWADD_STATUS';
 export const UPDATE_LIST = 'admin/staff/UPDATE_LIST';
 export const GET_LISTNUM = 'admin/staff/GET_LISTNUM';
 export const CHANGE_SEARCHTYPE = 'admin/staff/CHANGE_SEARCHTYPE';
+export const CHANGE_SEARCHNAME = 'admin/staff/CHANGE_SEARCHNAME';

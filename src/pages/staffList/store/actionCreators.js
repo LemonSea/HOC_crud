@@ -15,11 +15,16 @@ const change_SearchType = (value) => ({
     type: actionTypes.CHANGE_SEARCHTYPE,
     value: fromJS(value)
 });
+const change_SearchName = (value) => ({
+    type: actionTypes.CHANGE_SEARCHNAME,
+    value: fromJS(value)
+});
 
 
-// 获取list数据
+// 获取list数据，一般分页
 export const reqList = (pageNum, pageSize) => {
     return async (dispatch) => {
+        console.log('reqList')
         try {
             const result = await axiosAuthInstance({
                 method: "GET",
@@ -39,12 +44,43 @@ export const reqList = (pageNum, pageSize) => {
         }
     }
 }
+// 获取 list，搜索分页
+export const searchList = (pageNum, pageSize, searchType, searchName) => {
+    return async (dispatch) => {
+        console.log('searchList', searchName)
+        try {
+            const result = await axiosAuthInstance({
+                method: "GET",
+                url: 'staff/admin/searchList',
+                params: {  
+                    pageNum: pageNum,
+                    pageSize: pageSize,
+                    searchType,
+                    searchName
+                 }
+            })
+            if (result.status === 0) {
+                dispatch(getList(result.data.list, result.data.num))
+            } else {
+                dispatch(getList())
+            }
+        } catch (error) {
+            console.log('请求出错！', error)
+        }
+    }
+}
 
 
 export const changeSearchType = (value) => {
     return (dispatch) => {
         console.log(value)
         dispatch(change_SearchType(value))
+    }
+}
+export const changeSearchName = (value) => {
+    return (dispatch) => {
+        console.log(value)
+        dispatch(change_SearchName(value))
     }
 }
 

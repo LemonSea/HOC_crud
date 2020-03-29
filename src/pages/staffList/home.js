@@ -69,13 +69,14 @@ class StaffHome extends Component {
             <span>
               <Button type='primary'>空闲</Button>
               <Button type='danger'>忙碌</Button>
+              &emsp;空闲
             </span>
           )
         }
       },
       {
         title: '操作',
-        width: 300,
+        width: 100,
         render: (item) => (  // 返回需要线上的界面标签
           <span>
             <LinkButton onClick={() => {
@@ -108,7 +109,7 @@ class StaffHome extends Component {
 
   render() {
     // dispatch to props
-    const { getList, changeSearchType } = this.props;
+    const { getList, searchList,  changeSearchType, changeSearchName } = this.props;
     
     // state to props
     const { list, loading, total, searchType, searchName } = this.props;
@@ -127,8 +128,16 @@ class StaffHome extends Component {
           <Option value='name'>按名称搜索</Option>
           <Option value='company'>按公司搜索</Option>
         </Select>
-        <Input placeholder='关键字' style={{ width: 150, margin: '0 15px' }} />
-        <Button type='primary'>搜索</Button>
+        <Input 
+          placeholder='关键字' 
+          style={{ width: 150, margin: '0 15px' }}
+          value={searchName}
+          onChange={(event) => { changeSearchName(event.target.value)}}
+          />
+        <Button 
+          type='primary'
+          onClick={()=>{getList(1, searchType, searchName)}}
+        >搜索</Button>
       </span>
     )
 
@@ -150,7 +159,7 @@ class StaffHome extends Component {
             total, 
             defaultPageSize: PAGE_SIZE, 
             showQuickJumper: true,
-            onChange: (pageNum)=> { getList(pageNum) }
+            onChange: (pageNum)=> { getList(pageNum, searchType, searchName) }
           }}
         ></Table>
       </Card>
@@ -172,12 +181,19 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getList(pageNum) {
-    dispatch(actionCreators.reqList(pageNum, PAGE_SIZE));
+  getList(pageNum, searchType, searchName) {
+    if(searchName) {
+      dispatch(actionCreators.searchList(pageNum, PAGE_SIZE, searchType, searchName));
+    }
+    else {
+      dispatch(actionCreators.reqList(pageNum, PAGE_SIZE));
+    }
   },
   changeSearchType(value) {
     dispatch(actionCreators.changeSearchType(value));
-    console.log(value)
+  },
+  changeSearchName(value) {
+    dispatch(actionCreators.changeSearchName(value));
   }
 })
 

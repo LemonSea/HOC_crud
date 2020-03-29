@@ -22,6 +22,8 @@ export default (state = defaultState, action) => {
             });
         case actionTypes.CHANGE_SEARCHTYPE:
             return state.set('searchType', action.value);
+        case actionTypes.CHANGE_SEARCHNAME:
+            return state.set('searchName', action.value);
         default:
             return state;
     }
