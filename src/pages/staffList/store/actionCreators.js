@@ -6,10 +6,11 @@ import { fromJS } from 'immutable';
 // import { postLoginRequest } from '../../../api/request';
 import { axiosInstance, axiosAuthInstance } from "../../../api/config";
 
-const getList = (data, total) => ({
+const getList = (data, total, pageNum) => ({
     type: actionTypes.GET_LIST,
     list: fromJS(data),
-    total: total
+    total: fromJS(total),
+    pageNum: fromJS(pageNum)
 });
 const change_SearchType = (value) => ({
     type: actionTypes.CHANGE_SEARCHTYPE,
@@ -29,15 +30,15 @@ export const reqList = (pageNum, pageSize) => {
             const result = await axiosAuthInstance({
                 method: "GET",
                 url: 'staff/admin/list',
-                params: {  
+                params: {
                     pageNum: pageNum,
                     pageSize: pageSize
-                 }
+                }
             })
             if (result.status === 0) {
-                dispatch(getList(result.data.list, result.data.num))
+                dispatch(getList(result.data.list, result.data.num, result.data.pageNum))
             } else {
-                dispatch(getList())
+                dispatch(getList(result.data.list, result.data.num, result.data.pageNum))
             }
         } catch (error) {
             console.log('请求出错！', error)
@@ -52,19 +53,42 @@ export const searchList = (pageNum, pageSize, searchType, searchName) => {
             const result = await axiosAuthInstance({
                 method: "GET",
                 url: 'staff/admin/searchList',
-                params: {  
+                params: {
                     pageNum: pageNum,
                     pageSize: pageSize,
                     searchType,
                     searchName
-                 }
+                }
             })
             if (result.status === 0) {
-                dispatch(getList(result.data.list, result.data.num))
+                dispatch(getList(result.data.list, result.data.num, result.data.pageNum))
             } else {
-                dispatch(getList())
+                dispatch(getList(result.data.list, result.data.num, result.data.pageNum))
             }
         } catch (error) {
+            console.log('请求出错！', error)
+        }
+    }
+}
+// 获取 list，搜索分页
+export const changeStaffStatus = (_id, status) => {
+    return async (dispatch) => {
+        try {
+            const result = await axiosAuthInstance({
+                method: "POST",
+                url: 'staff/admin/staffStatus',
+                data: {
+                    _id,
+                    status
+                }
+            })
+            if (result.status === 0) {
+                alert('状态更新成功！')
+            } else {
+                alert('状态更新失败！')
+            }
+        } catch (error) {
+            alert('状态更新失败！')
             console.log('请求出错！', error)
         }
     }

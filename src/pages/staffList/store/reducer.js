@@ -8,6 +8,7 @@ const defaultState = fromJS({
     list: [],  // 员工列表
     loading: true,  // 加载显示  
     total: 0, // 分页总数量
+    pageNum: 1,
     searchType: 'name',  // 对应搜索的字段
     searchName: '',  // 搜索关键字
 });
@@ -18,6 +19,7 @@ export default (state = defaultState, action) => {
             return state.merge({
                 list: action.list,
                 total: action.total,
+                pageNum: action.pageNum,
                 loading: false
             });
         case actionTypes.CHANGE_SEARCHTYPE:

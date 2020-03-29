@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
+import { Link } from 'react-router-dom'
 
 import {
   Card,
@@ -63,13 +64,17 @@ class StaffHome extends Component {
       },
       {
         title: '状态',
-        dataIndex: 'status',
-        render: (status) => {
-          return(
+        render: (item) => {
+          const {status, _id } = item;
+          const newStatus = status === 0 ? 1 : 0;
+          console.log(item)
+          return (
             <span>
-              <Button type='primary'>空闲</Button>
-              <Button type='danger'>忙碌</Button>
-              &emsp;空闲
+              <span>{status === 0 ? '空闲' : '忙碌'}</span>
+              <Button 
+                type={status === 0 ? 'danger' : 'primary'}
+                onClick={() => this.props.changeStaffStatus(_id, newStatus, this.props.pageNum)}
+              >{status === 0 ? '开始工作' : '工作完成'}</Button>
             </span>
           )
         }
@@ -79,10 +84,11 @@ class StaffHome extends Component {
         width: 100,
         render: (item) => (  // 返回需要线上的界面标签
           <span>
-            <LinkButton onClick={() => {
-              // this.props.showEdit(item)
-            }
-            }>详情</LinkButton>
+
+            <LinkButton
+              onClick={() => this.props.history.push('/staff/staff/detail', { item })}
+            >详情</LinkButton>
+
             <LinkButton onClick={() => {
               // this.props.showEdit(item)
             }
@@ -102,15 +108,15 @@ class StaffHome extends Component {
     // list 标题
     this.initColumns()
   }
-  
+
   componentDidMount() {
     this.props.getList(1)
   }
 
   render() {
     // dispatch to props
-    const { getList, searchList,  changeSearchType, changeSearchName } = this.props;
-    
+    const { getList, changeSearchType, changeSearchName, changeStaffStatus } = this.props;
+
     // state to props
     const { list, loading, total, searchType, searchName } = this.props;
     const listJS = list ? list.toJS() : [];
@@ -120,23 +126,23 @@ class StaffHome extends Component {
 
     const title = (
       <span>
-        <Select 
-          value={searchType} 
-          style={{ width: 150 }} 
-          onChange={(value) => { changeSearchType(value)} }
+        <Select
+          value={searchType}
+          style={{ width: 150 }}
+          onChange={(value) => { changeSearchType(value) }}
         >
           <Option value='name'>按名称搜索</Option>
           <Option value='company'>按公司搜索</Option>
         </Select>
-        <Input 
-          placeholder='关键字' 
+        <Input
+          placeholder='关键字'
           style={{ width: 150, margin: '0 15px' }}
           value={searchName}
-          onChange={(event) => { changeSearchName(event.target.value)}}
-          />
-        <Button 
+          onChange={(event) => { changeSearchName(event.target.value) }}
+        />
+        <Button
           type='primary'
-          onClick={()=>{getList(1, searchType, searchName)}}
+          onClick={() => { getList(1, searchType, searchName) }}
         >搜索</Button>
       </span>
     )
@@ -155,11 +161,11 @@ class StaffHome extends Component {
           loading={loading}
           dataSource={dataSource}
           columns={this.columns}
-          pagination={{ 
-            total, 
-            defaultPageSize: PAGE_SIZE, 
+          pagination={{
+            total,
+            defaultPageSize: PAGE_SIZE,
             showQuickJumper: true,
-            onChange: (pageNum)=> { getList(pageNum, searchType, searchName) }
+            onChange: (pageNum) => { getList(pageNum, searchType, searchName) }
           }}
         ></Table>
       </Card>
@@ -176,13 +182,14 @@ const mapStateToProps = (state) => ({
   loading: state.getIn(['staffReducer', 'loading']),
   // page total
   total: state.getIn(['staffReducer', 'total']),
+  pageNum: state.getIn(['staffReducer', 'pageNum']),
   searchType: state.getIn(['staffReducer', 'searchType']),
   searchName: state.getIn(['staffReducer', 'searchName']),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   getList(pageNum, searchType, searchName) {
-    if(searchName) {
+    if (searchName) {
       dispatch(actionCreators.searchList(pageNum, PAGE_SIZE, searchType, searchName));
     }
     else {
@@ -194,6 +201,11 @@ const mapDispatchToProps = (dispatch) => ({
   },
   changeSearchName(value) {
     dispatch(actionCreators.changeSearchName(value));
+  },
+  changeStaffStatus(_id, status, pageNum) {
+    dispatch(actionCreators.changeStaffStatus(_id, status));
+    // console.log(pageNum)
+    dispatch(actionCreators.reqList(pageNum, PAGE_SIZE));
   }
 })
 
