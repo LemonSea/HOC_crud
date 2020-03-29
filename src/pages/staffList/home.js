@@ -67,11 +67,12 @@ class StaffHome extends Component {
         render: (item) => {
           const {status, _id } = item;
           const newStatus = status === 0 ? 1 : 0;
-          console.log(item)
+          // console.log(item)
           return (
             <span>
-              <span>{status === 0 ? '空闲' : '忙碌'}</span>
-              <Button 
+              <span style={{marginRight: 30}}>当前状态：{status === 0 ? '空闲' : '忙碌'}</span>
+              <Button
+                style={{marginRight: -30}}
                 type={status === 0 ? 'danger' : 'primary'}
                 onClick={() => this.props.changeStaffStatus(_id, newStatus, this.props.pageNum)}
               >{status === 0 ? '开始工作' : '工作完成'}</Button>
