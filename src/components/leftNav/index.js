@@ -21,6 +21,9 @@ function LeftNav(props) {
     }, [])
 
     let path = props.location.pathname;
+    if(path.indexOf('/staff/staff') === 0) {
+        path = '/staff/staff'
+    }
 
     // 得到需要打开的菜单项
     let openKey;
@@ -68,7 +71,7 @@ function LeftNav(props) {
             } else {
                 // 查找一个与当前请求路径匹配的子Item
                 // 如果存在，说明当前 Item 的子列表需要展开
-                const cItem = item.children.find(cItem => cItem.key === path);
+                const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0);
                 if (cItem) {
                     openKey = item.key;
                 }
