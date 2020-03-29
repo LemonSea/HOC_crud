@@ -5,10 +5,8 @@ import { fromJS } from 'immutable';
 
 // 这里用到fromJS把JS数据结构转化成immutable数据结构
 const defaultState = fromJS({
-    staffStatusList: {
-        staffStatusList: [],  // 员工列表
-        loading: true,  // 加载显示        
-    },
+    list: [],  // 员工列表
+    loading: true,  // 加载显示 
     showStatus: 0,  // 添加/修改内容是否显示 0：都不显示；1：显示添加；2：显示更新,
     currentObj: {}
 });
@@ -16,7 +14,10 @@ const defaultState = fromJS({
 export default (state = defaultState, action) => {
     switch (action.type) {
         case actionTypes.GET_LIST:
-            return state.set('staffStatusList', action.data);
+            return state.merge({
+                list: action.data,
+                loading: false
+            });;
         case actionTypes.SHOWADD_STATUS:
             return state.set('showStatus', action.data);
         case actionTypes.SHOWSTATUS_CANCEL:

@@ -42,8 +42,13 @@ const menuList = [
         "icon": "appstore",
         "children": [
             {
-                "title": "公司管理",
+                "title": "员工分类",
                 "key": "/staff/StaffStatus",
+                "icon": "appstore"
+            },
+            {
+                "title": "员工管理",
+                "key": "/staff/staff",
                 "icon": "appstore"
             }
         ]

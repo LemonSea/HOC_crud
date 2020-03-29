@@ -25,14 +25,15 @@ class AddForm extends Component {
     <Form >
       <Form.Item>
         {getFieldDecorator('name', {
-          initialValue: ''
+          // initialValue: '',
+          rules: [{ required: true, message: '分类名称必须输入!'}]
         })(
           <Input placeholder="输入员工类别名" />,
         )}
       </Form.Item>
       <Form.Item>
         {getFieldDecorator('describe', {
-          initialValue: ''
+          // initialValue: ''
         })(
           <Input placeholder="输入类别描述" />,
         )}

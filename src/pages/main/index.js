@@ -15,6 +15,7 @@ import Home from '../home';
 import Role from '../role/role';
 import Authority from '../role/authority';
 import Company from '../company/company';
+import Staff from '../staffList/staff';
 import StaffStatus from '../staff/staffStatus/index';
 
 const { Footer, Sider, Content } = Layout;
@@ -41,11 +42,12 @@ function Main(props) {
                         <Switch>
                             <Route path='/home' component={Home}></Route>
                             <Route path='/company/list' component={Company}></Route>
+                            <Route path='/staff/staff' component={Staff}></Route>
                             <Route path='/staff/staffStatus' component={StaffStatus}></Route>
                             <Route path='/role/role' component={Role}></Route>
                             <Route path='/role/authority' component={Authority}></Route>
                             {/* 如果上面没有匹配到，就返回Home */}
-                            <Redirect to='/home' />
+                            {/* <Redirect to='/home' /> */}
                         </Switch>
                     </Content>
                     <Footer style={{ textAlign: 'center', color: '#777' }}>Footer</Footer>

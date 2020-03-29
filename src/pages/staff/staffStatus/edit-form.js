@@ -28,7 +28,10 @@ class EditForm extends Component {
     <Form >
       <Form.Item>
         {getFieldDecorator('name', {
-          initialValue: item.name
+          initialValue: item.name,
+          rules: [
+            { required: true, message: '分类名称必须输入!'}
+          ]
         })(
           <Input placeholder="输入员工类别名" />,
         )}

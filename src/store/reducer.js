@@ -4,6 +4,7 @@ import { combineReducers } from 'redux-immutable';
 import { reducer as loginReducer } from '../pages/login/store';
 import { reducer as menuListReducer } from '../components/leftNav/store';
 import { reducer as staffStatusReducer } from '../pages/staff/staffStatus/store';
+import { reducer as staffReducer } from '../pages/staffList/store';
 // import { reducer as articleStatusReducer } from '../pages/articleManage/articleStatusManage/store';
 // import { reducer as articleTypeReducer } from '../pages/articleManage/articleTypeManage/store';
 
@@ -15,7 +16,8 @@ const reducer = combineReducers({
     // login: loginReducer,
     userList: loginReducer,
     menuList: menuListReducer,
-    staffStatusList: staffStatusReducer
+    staffStatusList: staffStatusReducer,
+    staffReducer
 })
 
 export default reducer

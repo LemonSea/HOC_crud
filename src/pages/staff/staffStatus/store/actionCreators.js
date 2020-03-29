@@ -8,10 +8,7 @@ import { axiosInstance, axiosAuthInstance } from "../../../../api/config";
 
 const getList = (data) => ({
     type: actionTypes.GET_LIST,
-    data: fromJS({
-        staffStatusList: data,
-        loading: false
-    })
+    data: fromJS(data)
 });
 
 const handleCancelStatus = () => ({

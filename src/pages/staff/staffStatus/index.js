@@ -28,8 +28,8 @@ class StaffStatus extends Component {
       },
       {
         title: '创建者',
-        dataIndex: 'creator',
-        key: 'creator',
+        dataIndex: 'creator[nickname]',
+        key: 'creator[nickname]',
       },
       {
         title: '创建时间',
@@ -62,6 +62,7 @@ class StaffStatus extends Component {
   }
 
   componentDidMount() {
+    console.log('staffStatus')
     this.props.getStaffStatusList()
   }
 
@@ -140,9 +141,9 @@ class StaffStatus extends Component {
 const mapStateToProps = (state) => ({
   // 不要再这里将数据toJS,不然每次diff比对props的时候都是不一样的引用，还是导致不必要的重渲染, 属于滥用immutable
   // staff status's list
-  staffStatusList: state.getIn(['staffStatusList', 'staffStatusList', 'staffStatusList']),
+  staffStatusList: state.getIn(['staffStatusList', 'list']),
   // list loading ...
-  loading: state.getIn(['staffStatusList', 'staffStatusList', 'loading']),
+  loading: state.getIn(['staffStatusList', 'loading']),
   // modal show status
   showStatus: state.getIn(['staffStatusList', 'showStatus']),
   // current admin
@@ -169,26 +170,34 @@ const mapDispatchToProps = (dispatch) => ({
   },
 
   addStaffStatus(creator, form) {
-    const formDate = {
-      name: form.getFieldValue('name'),
-      describe: form.getFieldValue('describe'),
-      creator: creator._id
-    }
-    dispatch(actionCreators.addStaffStatus(formDate));
-    form.resetFields();
-    dispatch(actionCreators.handleCancel());
+    form.validateFields((err, value) => {
+      if (!err) {
+        const formDate = {
+          name: value.name,
+          describe: value.describe,
+          creator: creator._id
+        }
+        dispatch(actionCreators.addStaffStatus(formDate));
+        form.resetFields();
+        dispatch(actionCreators.handleCancel());
+      }
+    })
   },
   editStaffStatus(_id, creator, form) {
-    const formDate = {
-      name: form.getFieldValue('name'),
-      describe: form.getFieldValue('describe'),
-      creator: creator._id
-    }
-    dispatch(actionCreators.editStaffStatus(_id, formDate));
-    form.resetFields();
-    dispatch(actionCreators.handleCancel());
+    form.validateFields((err, value) => {
+      if (!err) {
+        const formDate = {
+          name: value.name,
+          describe: value.describe,
+          creator: creator._id
+        }
+        dispatch(actionCreators.editStaffStatus(_id, formDate));
+        form.resetFields();
+        dispatch(actionCreators.handleCancel());
+      }
+    })
   },
-  deleteById(item){
+  deleteById(item) {
     console.log(item._id)
     dispatch(actionCreators.deleteById(item._id));
   }
