@@ -62,7 +62,7 @@ class StaffStatus extends Component {
   }
 
   componentDidMount() {
-    console.log('staffStatus')
+    // console.log('staffStatus')
     this.props.getStaffStatusList()
   }
 

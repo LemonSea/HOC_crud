@@ -20,6 +20,10 @@ const change_SearchName = (value) => ({
     type: actionTypes.CHANGE_SEARCHNAME,
     value: fromJS(value)
 });
+const staffType = (data) => ({
+    type: actionTypes.GET_STAFFTYPELIST,
+    data: fromJS(data)
+});
 
 
 // 获取list数据，一般分页
@@ -108,3 +112,21 @@ export const changeSearchName = (value) => {
     }
 }
 
+// 获取 StaffTypeList 数据
+export const getStaffType = () => {
+    return async (dispatch) => {
+        try {
+            const result = await axiosAuthInstance({
+                method: "GET",
+                url: 'staffStatus/type',
+            })
+            if (result.status === 0) {
+                dispatch(staffType(result.data))
+            } else {
+                dispatch(staffType())
+            }
+        } catch (error) {
+            console.log('请求出错！', error)
+        }
+    }
+}

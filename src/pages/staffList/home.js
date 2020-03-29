@@ -116,7 +116,7 @@ class StaffHome extends Component {
 
   render() {
     // dispatch to props
-    const { getList, changeSearchType, changeSearchName, changeStaffStatus } = this.props;
+    const { getList, changeSearchType, changeSearchName } = this.props;
 
     // state to props
     const { list, loading, total, searchType, searchName } = this.props;
@@ -125,6 +125,7 @@ class StaffHome extends Component {
     // list 内容
     const dataSource = listJS;
 
+    // 左侧
     const title = (
       <span>
         <Select
@@ -148,9 +149,11 @@ class StaffHome extends Component {
       </span>
     )
 
+    // 右侧
     const extra = (
-      <Button type='primary'>
+      <Button type='primary' onClick={() => this.props.history.push('/staff/staff/addUpdate')}>
         <Icon type='plus' />
+        添加
       </Button>
     )
 

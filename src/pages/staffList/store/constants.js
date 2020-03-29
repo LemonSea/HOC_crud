@@ -6,3 +6,4 @@ export const UPDATE_LIST = 'admin/staff/UPDATE_LIST';
 export const GET_LISTNUM = 'admin/staff/GET_LISTNUM';
 export const CHANGE_SEARCHTYPE = 'admin/staff/CHANGE_SEARCHTYPE';
 export const CHANGE_SEARCHNAME = 'admin/staff/CHANGE_SEARCHNAME';
+export const GET_STAFFTYPELIST = 'admin/staff/GET_STAFFTYPELIST';

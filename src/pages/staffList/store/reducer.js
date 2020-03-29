@@ -11,6 +11,7 @@ const defaultState = fromJS({
     pageNum: 1,
     searchType: 'name',  // 对应搜索的字段
     searchName: '',  // 搜索关键字
+    staffType: [],  // 员工类型
 });
 
 export default (state = defaultState, action) => {
@@ -26,6 +27,8 @@ export default (state = defaultState, action) => {
             return state.set('searchType', action.value);
         case actionTypes.CHANGE_SEARCHNAME:
             return state.set('searchName', action.value);
+        case actionTypes.GET_STAFFTYPELIST:
+            return state.set('staffType', action.data);
         default:
             return state;
     }
