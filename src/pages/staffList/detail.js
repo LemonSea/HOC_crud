@@ -77,13 +77,13 @@ class StaffDetail extends Component {
             <span>{item.IDCard}</span>
           </Item>
           <Item>
-            <span className="left">照片</span>
+            <span className="left">照片:</span>
             <span>
               {item.imgs.map((item, index) => {
                 return (
                   // < Option key={item.name} value={item.name}>{item.name}</Option>
                   <img
-                    key={item.name}
+                    key={item.name+item.url}
                     className='staff-img'
                     alt={item.name}
                     src={BASE_IMG_URL + item.url} ></img>

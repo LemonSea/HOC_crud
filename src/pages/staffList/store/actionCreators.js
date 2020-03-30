@@ -78,15 +78,18 @@ export const searchList = (pageNum, pageSize, searchType, searchName) => {
 export const changeStaffStatus = (_id, status) => {
     return async (dispatch) => {
         try {
+            
+            // console.log(_id, status)
             const result = await axiosAuthInstance({
-                method: "POST",
-                url: 'staff/admin/staffStatus',
+                method: "PUT",
+                url: 'staff/admin/staffType',
                 data: {
                     _id,
                     status
                 }
             })
             if (result.status === 0) {
+
                 alert('状态更新成功！')
             } else {
                 alert('状态更新失败！')

@@ -14,20 +14,21 @@ function getBase64(file) {
 
 class PicturesWall extends React.Component {
 
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     let fileList = []
 
     const { imgs } = this.props;
-    console.log(imgs)
-    if(imgs && imgs.length>0) {
+    console.log('imgs', imgs)
+    if (imgs && imgs.length > 0) {
       fileList = imgs.map((img, index) => ({
         uid: -index,
-        name: img.name,
+        name: img,
         status: 'done',
-        url: BASE_IMG_URL + img.url
+        url: BASE_IMG_URL + img,
       }))
+      console.log('fileList', fileList)
     }
 
 
@@ -42,7 +43,14 @@ class PicturesWall extends React.Component {
    * 获取所有已上传图片文件名的数组
    */
   getImgs = () => {
-    return this.state.fileList.map(file => [file.name, file.url])
+    console.log(this.state.fileList)
+    return this.state.fileList.map(file => file.name)
+    // return this.state.fileList.forEach(file => {
+    //   return {
+    //     name: file.name,
+    //     url: file.url
+    //   }
+    // });
   }
 
   // 隐藏 Modal
@@ -63,25 +71,21 @@ class PicturesWall extends React.Component {
    * fileList：所有已上传图片文件对象的数组
    */
   handleChange = ({ file, fileList }) => {
-    // console.log(file.status, fileList.length, file)
-    // console.log('handleChange')
-    if(file.status === 'done') {
+    if (file.status === 'done') {
       const result = file.response;
-      // console.log('result', result)
-      if(result.status === 0) {
+      if (result.status === 0) {
         // message.success('上传图片成功');
         alert('上传图片成功')
-        // console.log(result.data)
         const { name, url } = result.data;
         file = fileList[fileList.length - 1];
-        file.name = name;
+        file.name = url;
         file.url = url;
       }
-    } else if(file.status === 'removed') {  // 删除图片
+    } else if (file.status === 'removed') {  // 删除图片
 
     }
     this.setState({ fileList });
-    // console.log(this.state.fileList)
+    // console.log('fileList', this.state.fileList)
   }
   render() {
     const { previewVisible, previewImage, fileList } = this.state;

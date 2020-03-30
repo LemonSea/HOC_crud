@@ -40,13 +40,11 @@ class StaffAddUpdate extends Component {
 
   // 评分
   handleRateChange = value => {
-    // console.log(`Rate ${value}`);
     this.setState({ star: value });
   };
 
   // 单选框
   onRadioChange = e => {
-    // console.log('radio checked', e.target.value);
     this.setState({
       radioValue: e.target.value,
     });
@@ -54,12 +52,10 @@ class StaffAddUpdate extends Component {
 
   // 下拉框
   handleSelectChange = (value) => {
-    console.log(`selected ${value}`);
     this.setState({ selectOption: value });
   }
   // time
   onDatePickerChange = (date, dateString) => {
-    console.log(date, dateString);
     this.setState({ inductionTime: dateString });
   }
   /**
@@ -80,6 +76,7 @@ class StaffAddUpdate extends Component {
     this.props.form.validateFields((error, value) => {
       if (!error) {
         const imgs = this.pw.current.getImgs()
+        console.log('pw', imgs)
         let formData = {
           name: value.name,
           // staffStatus: this.state.selectOption,
@@ -99,14 +96,15 @@ class StaffAddUpdate extends Component {
           star: this.state.star,
           introduction: value.introduction,
         }
-        console.log('formData', formData)
+        // console.log('formData', formData)
+
         if (this.props.location.state) {
-          console.log('update')
+          // console.log('update')
           const _id = this.props.location.state.item._id;
           this.props.editStaff(_id, formData)
           this.props.history.push('/staff/staff')
         } else {
-          console.log('add')
+          // console.log('add')
           this.props.addStaff(formData)
           this.props.history.push('/staff/staff')
         } 
@@ -147,8 +145,7 @@ class StaffAddUpdate extends Component {
     const { star } = this.state;
 
     const { isUpdate, item } = this
-    console.log('item', item)
-    // console.log('staffStatus', item.staffStatus._id)
+    // console.log('item', item)
 
     // 左侧
     const title = (
@@ -208,6 +205,7 @@ class StaffAddUpdate extends Component {
           </Item>
           {/* PicturesWall */}
           <Item label='员工照片'>
+            {console.log('picture', item.imgs)}
             <PicturesWall ref={this.pw} imgs={item.imgs}></PicturesWall>
           </Item>
           {/* Radio */}
@@ -228,7 +226,6 @@ class StaffAddUpdate extends Component {
           </Item>
           {/* DatePicker */}
           <Item label='入职时间:'>
-            {/* {console.log('item.inductionTime', item)} */}
             {getFieldDecorator('inductionTime', {
               initialValue: item ? moment(item.inductionTime) : null,
               rules: [{ required: true, message: '必须输入入职时间!' }],
