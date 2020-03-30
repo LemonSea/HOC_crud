@@ -25,7 +25,7 @@ export default class AuthForm extends Component {
   getMenus = () => this.state.checkedKeys;
 
   getTreeNodes = (menuList) => {
-    console.log(menuList)
+    // console.log(menuList)
     return menuList.reduce((pre, item) => {
       pre.push(
         <TreeNode title={item.title} key={item.key} >
@@ -46,13 +46,20 @@ export default class AuthForm extends Component {
     this.treeNodes = this.getTreeNodes(this.props.list.toJS())
   }
 
+  componentWillReceiveProps(nextProps) {
+    const menu = nextProps.item.menu
+    this.setState({
+      checkedKeys: menu,
+    })
+  }
+
   render() {
     // dispatch to props
     // const { getMenuList } = this.props;
     // state to props
     const { list } = this.props;
     const menuList = list ? list.toJS() : [];
-    console.log(menuList)
+    // console.log(menuList)
 
     const { item } = this.props;
     const { checkedKeys } = this.state;

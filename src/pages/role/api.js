@@ -20,16 +20,30 @@ export const reqAddRole = (data) => {
 }
 export const reqUpdateRole = (_id, data) => {
     try {
-        const Result = axiosAuthInstance({
+        console.log('data', data)
+        return axiosAuthInstance({
             method: "PUT",
             headers: { 'Content-type': 'application/json', },
-            url: 'role/admin',
+            url: 'role/auth',
             data: {
                 _id,
                 data
             },
         })
-        return Result;
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}
+export const reqDeleteRole = (_id) => {
+    try {
+        return axiosAuthInstance({
+            method: "DELETE",
+            headers: { 'Content-type': 'application/json', },
+            url: 'role',
+            data: {
+                _id
+            },
+        })
     } catch (error) {
         console.log('请求出错！', error)
     }

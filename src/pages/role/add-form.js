@@ -37,14 +37,14 @@ class AddForm extends Component {
           <Input placeholder="输入角色名称" />,
         )}
       </Form.Item>
-      <Form.Item label='角色备注：' {...formItemLayout}>
+      {/* <Form.Item label='角色备注：' {...formItemLayout}>
         {getFieldDecorator('description', {
           initialValue: '',
           // rules: [{ required: true, message: '角色名称必须输入!'}]
         })(
           <Input placeholder="输入角色备注" />,
         )}
-      </Form.Item>
+      </Form.Item> */}
     </Form>
   )
 }

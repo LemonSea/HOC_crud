@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
-import { reqAddRole } from './api';
+import { reqAddRole, reqUpdateRole, reqDeleteRole } from './api';
 import AddForm from './add-form';
 import AuthForm from './auth-form';
 import moment from 'moment';
@@ -29,13 +29,11 @@ class Role extends Component {
     this.auth = React.createRef()
 
     this.state = {
-      item: {},
+      item: {},  // 当前选中项
       isShowAdd: false,  // 是否显示添加界面
       isShowAuth: false,  // 是否显示设置权限界面
     }
   }
-
-
 
   // table 标题
   initColumns = () => {
@@ -44,11 +42,6 @@ class Role extends Component {
         title: '角色名称',
         dataIndex: 'name',
         key: 'name',
-      },
-      {
-        title: '角色描述',
-        dataIndex: 'description',
-        key: 'description',
       },
       {
         title: '角色管理员',
@@ -60,8 +53,33 @@ class Role extends Component {
         dataIndex: 'createTime',
         key: 'createTime',
         render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        title: '操作',
+        width: 300,
+        render: (item) => (  // 返回需要线上的界面标签
+          <span>
+            <Button type='danger' onClick={() => {this.delete(this.deleteRole)}}
+            >删除角色</Button>
+          </span>
+        ),
       }
     ];
+  }
+
+  delete = (deleteRole) => {
+    Modal.confirm({
+      title: '确定删除该角色吗?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteRole();
+      },
+      // onCancel() {
+      //   console.log('Cancel');
+      // },
+    });
   }
 
   // 全行选中
@@ -74,9 +92,10 @@ class Role extends Component {
       }
     }
   }
-  // /**
-  //  * 添加角色
-  //  */
+
+  /**
+   * 添加角色
+   */
   addRole = (creator) => {
     this.form.validateFields(async (err, value) => {
       if (!err) {
@@ -92,27 +111,42 @@ class Role extends Component {
           this.form.resetFields();
           this.props.getList()
         } else {
-          message.success('添加角色失败!');
+          message.warn('添加角色失败!');
         }
       }
     })
     // console.log('addRole', this.form)
   };
-  /**
-   * 更新角色
+
+ /**
+   * 更新角色权限
    */
   updateRole = async () => {
     const item = this.state.item;
     const menu = this.auth.current.getMenus()
     item.menu = menu;
-
-    const result = await reqAddRole(item._id, item.menu)
+    console.log(item.menu)
+    const result = await reqUpdateRole(item._id, item.menu)
     if (result.status === 0) {
       message.success('修改角色权限成功!');
       this.setState({ isShowAuth: false });
       this.props.getList()
     } else {
-      message.success('修改角色权限失败!');
+      message.warn('修改角色权限失败!');
+    }
+  };
+
+     /**
+   * 删除角色
+   */
+  deleteRole = async () => {
+    const item = this.state.item;
+    const result = await reqDeleteRole(item._id)
+    if (result.status === 0) {
+      message.success('删除角色成功!');
+      this.props.getList()
+    } else {
+      message.warn('删除角色失败!');
     }
   };
 
@@ -215,21 +249,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getList() {
     dispatch(actionCreators.getList());
-  },
-  // addRole(creator, form) {
-  //   // form.validateFields((err, value) => {
-  //   //   if (!err) {
-  //   //     const formDate = {
-  //   //       name: value.name,
-  //   //       describe: value.describe,
-  //   //       creator: creator._id
-  //   //     }
-  //   //     dispatch(actionCreators.addRole(formDate));
-  //   //     form.resetFields();
-  //   //   }
-  //   // })
-  //   console.log('addRole', form)
-  // },
+  }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Role))
