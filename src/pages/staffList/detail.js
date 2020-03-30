@@ -22,24 +22,24 @@ class StaffDetail extends Component {
 
   render() {
 
-    const {item} = this.props.location.state
+    const { item } = this.props.location.state
     console.log(item)
 
     // dispatch to props
-    const {  } = this.props;
-    
+    const { } = this.props;
+
     // state to props
-    const {  } = this.props;
+    const { } = this.props;
     // const listJS = list ? list.toJS() : [];
 
     const title = (
       <span>
         <LinkButton>
-        <Icon 
-          type='arrow-left' 
-          style={{color:'green', marginRight:15, fontSize:20}}
-          onClick={()=> this.props.history.goBack()}
-        />
+          <Icon
+            type='arrow-left'
+            style={{ color: 'green', marginRight: 15, fontSize: 20 }}
+            onClick={() => this.props.history.goBack()}
+          />
         </LinkButton>
         <span>员工详情</span>
       </span>
@@ -79,10 +79,16 @@ class StaffDetail extends Component {
           <Item>
             <span className="left">照片</span>
             <span>
-              <img
-                className='staff-img'
-                alt='img'
-                src={ BASE_IMG_URL + item.avatar} ></img>
+              {item.imgs.map((item, index) => {
+                return (
+                  // < Option key={item.name} value={item.name}>{item.name}</Option>
+                  <img
+                    key={item.name}
+                    className='staff-img'
+                    alt={item.name}
+                    src={BASE_IMG_URL + item.url} ></img>
+                )
+              })}
             </span>
           </Item>
           <Item>
@@ -119,8 +125,8 @@ class StaffDetail extends Component {
           </Item>
           <Item>
             <span className="left">介绍:</span>
-            <span dangerouslySetInnerHTML={{__html: item.introduction}}>
-              
+            <span dangerouslySetInnerHTML={{ __html: item.introduction }}>
+
             </span>
           </Item>
         </List>

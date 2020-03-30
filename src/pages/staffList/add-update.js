@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import {
   Card,
   Form,
@@ -14,6 +15,7 @@ import {
   Rate
 } from 'antd';
 import LinkButton from '../../components/link-button/index';
+import PicturesWall from './pictures-wall';
 
 import { actionCreators } from './store';
 
@@ -24,22 +26,27 @@ const desc = ['1分', '2分', '3分', '4分', '5分'];
 // Staff 的添加和更新子路由
 class StaffAddUpdate extends Component {
 
+  constructor(props) {
+    super(props);
+    this.pw = React.createRef();
+  }
+
   state = {
     radioValue: 1,
     star: 0,
-    selectOption:'',
-    inductionTime:''
+    selectOption: '',
+    inductionTime: ''
   };
 
   // 评分
   handleRateChange = value => {
-    console.log(`Rate ${value}`);
+    // console.log(`Rate ${value}`);
     this.setState({ star: value });
   };
 
   // 单选框
   onRadioChange = e => {
-    console.log('radio checked', e.target.value);
+    // console.log('radio checked', e.target.value);
     this.setState({
       radioValue: e.target.value,
     });
@@ -72,35 +79,56 @@ class StaffAddUpdate extends Component {
   submit = () => {
     this.props.form.validateFields((error, value) => {
       if (!error) {
+        const imgs = this.pw.current.getImgs()
+        // if(this.state.selectOption) {
         let formData = {
           name: value.name,
-          IDCard: value.IDCard,
-          address: value.address,
-          age: value.age,
+          // staffStatus: this.state.selectOption,
+          staffStatus: value.staffStatus,
+          company: '5e8157afe156e748b48370a5', //*
           costHour: value.costHour,
+          status: this.props.location.state ? this.props.location.state.item : 0,
           workNumber: value.workNumber,
+          IDCard: value.IDCard,
+          imgs,
           gender: this.state.radioValue,
+          age: value.age,
+          // inductionTime: this.state.inductionTime,
+          inductionTime: value.inductionTime,
+          address: value.address,
           star: this.state.star,
-          inductionTime: this.state.inductionTime,
-          staffStatus: this.state.selectOption,
+          introduction: value.introduction,
         }
-        console.log(formData)
-        alert('submit')
+        // const _id = this.props.location.state.item._id;
+        // alert('submit')
+        console.log('formData', formData)
+        if (this.props.location.state) {
+          console.log('update')
+          // const _id = this.props.location.state.item._id;
+        } else {
+          console.log('add')
+          this.props.addStaff(formData)
+          this.props.history.push('/staff/staff')
+        }
+        // } else {
+        //   alert('请选择员工类型！')
+        // }        
       }
     })
   }
 
   componentDidMount() {
-    // console.log('getStaffType')
+    // 获取员工类型
     this.props.getStaffType()
   }
 
   componentWillMount() {
     const item = this.props.location.state
     this.isUpdate = !!item
-    this.item = item.item || {}
+    this.item = item ? item.item : {}
+    // console.log('item', item)
 
-    
+
     this.setState({ radioValue: this.item.gender });
     this.setState({ star: this.item.star });
     // this.setState({ selectOption: this.item.star });
@@ -111,6 +139,7 @@ class StaffAddUpdate extends Component {
 
     const { staffType } = this.props;
     const staffTypeJS = staffType ? staffType.toJS() : [];
+    // console.log('staffTypeJS', staffTypeJS)
 
     const formItemLayout = {
       labelCol: { span: 2 },  // 左侧 label 宽度
@@ -120,15 +149,15 @@ class StaffAddUpdate extends Component {
     const { star } = this.state;
 
     const { isUpdate, item } = this
-    console.log('item', item)
+    // console.log('item', item)
 
     // 左侧
     const title = (
       <span>
         <LinkButton>
-          <Icon type='arrow-left' style={{ fontSize: 20 }} onClick={()=> this.props.history.goBack()}/>
+          <Icon type='arrow-left' style={{ fontSize: 20 }} onClick={() => this.props.history.goBack()} />
         </LinkButton>
-        <span>{ isUpdate ? '修改员工信息' : '添加员工'}</span>
+        <span>{isUpdate ? '修改员工信息' : '添加员工'}</span>
       </span>
     )
 
@@ -146,13 +175,17 @@ class StaffAddUpdate extends Component {
           </Item>
           {/* select */}
           <Item label='员工类型'>
-            <Select defaultValue="选择员工类型" style={{ width: 410 }} onChange={this.handleSelectChange}>
-              {staffTypeJS.map((item, index) => {
-                return (
-                  < Option key={item.name} value={item.name}>{item.name}</Option>
-                )
-              })}
-            </Select>
+            {getFieldDecorator('staffStatus', {
+              initialValue: item ? item.staffStatus : "选择员工类型",
+              rules: [{ required: true, message: '必须输入员工类型!' }],
+            })(
+              <Select style={{ width: 410 }} onChange={this.handleSelectChange}>
+                {staffTypeJS.map((item, index) => {
+                  return (
+                    < Option key={item._id} value={item._id}>{item.name}</Option>
+                  )
+                })}
+              </Select>)}
           </Item>
           <Item label='费用:'>
             {getFieldDecorator('costHour', {
@@ -173,15 +206,20 @@ class StaffAddUpdate extends Component {
               initialValue: item.IDCard,
             })(<Input placeholder='身份证号码' />)}
           </Item>
+          {/* PicturesWall */}
           <Item label='员工照片'>
-            <div>员工照片</div>
+            <PicturesWall ref={this.pw} imgs={item.imgs}></PicturesWall>
           </Item>
           {/* Radio */}
           <Item label='性别:'>
-            <Radio.Group onChange={this.onRadioChange} value={this.state.radioValue}>
+          {getFieldDecorator('gender', {
+              initialValue: item ? item.gender : this.state.radioValue,
+              // rules: [{ required: true, message: '必须输入员工类型!' }],
+            })(
+            <Radio.Group onChange={this.onRadioChange}>
               <Radio value={0}>女</Radio>
               <Radio value={1}>男</Radio>
-            </Radio.Group>
+            </Radio.Group>)}
           </Item>
           <Item label='年龄:'>
             {getFieldDecorator('age', {
@@ -190,7 +228,17 @@ class StaffAddUpdate extends Component {
           </Item>
           {/* DatePicker */}
           <Item label='入职时间:'>
-            <DatePicker onChange={this.onDatePickerChange} placeholder="入职时间" style={{ width: 410 }} />
+            {/* {console.log('item.inductionTime', item)} */}
+            {getFieldDecorator('inductionTime', {
+              initialValue: item ? moment(item.inductionTime) : null,
+              rules: [{ required: true, message: '必须输入入职时间!' }],
+            })(
+              <DatePicker
+                // defaultValue={item ? moment(item.inductionTime) : null}
+                onChange={this.onDatePickerChange}
+                placeholder="入职时间"
+                style={{ width: 410 }}
+              />)}
           </Item>
           <Item label='家庭地址:'>
             {getFieldDecorator('address', {
@@ -198,17 +246,20 @@ class StaffAddUpdate extends Component {
             })(<TextArea placeholder='家庭地址' autosize={{ minRows: 2, maxRows: 6 }} />)}
           </Item>
           {/* Rate */}
-          <Item label='星级:'>
-            {/* {getFieldDecorator('star', {
-              initialValue: '',
-            })(<Input placeholder='星级' />)} */}
+          <Item label='星级:'>            
+          {getFieldDecorator('star', {
+              initialValue: star,
+              // rules: [{ required: true, message: '必须输入员工类型!' }],
+            })(
             <span>
               <Rate tooltips={desc} onChange={this.handleRateChange} value={star} />
               {star ? <span className="ant-rate-text">{desc[star - 1]}</span> : ''}
-            </span>
+            </span>)}
           </Item>
           <Item label='员工简介'>
-            <div>员工简介</div>
+            {getFieldDecorator('introduction', {
+              initialValue: item.introduction,
+            })(<TextArea placeholder='员工简介' autosize={{ minRows: 2, maxRows: 6 }} />)}
           </Item>
           <Item>
             <Button type='primary' onClick={this.submit}>提交</Button>
@@ -226,6 +277,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getStaffType() {
     dispatch(actionCreators.getStaffType());
+  },
+  addStaff(data) {
+    dispatch(actionCreators.addStaff(data));
   },
 })
 

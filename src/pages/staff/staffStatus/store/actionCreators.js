@@ -130,7 +130,7 @@ export const editStaffStatus = (_id, formData) => {
         }
     }
 }
-// 修改内容
+// 删除内容
 export const deleteById = (_id) => {
     return async (dispatch) => {
         try {
