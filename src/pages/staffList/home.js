@@ -29,8 +29,8 @@ class StaffHome extends Component {
       },
       {
         title: '员工类型',
-        dataIndex: 'staffStatus',
-        key: 'staffStatus',
+        dataIndex: 'staffStatus[name]',
+        key: 'staffStatus[name]',
       },
       {
         title: '所属公司',
@@ -94,8 +94,8 @@ class StaffHome extends Component {
               onClick={() => this.props.history.push('/staff/staff/addUpdate', { item })}
             >修改</LinkButton>
             <LinkButton onClick={() => {
-              // this.props.deleteById(item)
-              // this.props.getStaffStatusList();
+              this.props.deleteById(item)
+              this.props.getList();
             }
             }>删除</LinkButton>
           </span>
@@ -209,6 +209,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actionCreators.changeStaffStatus(_id, status));
     // console.log(pageNum)
     dispatch(actionCreators.reqList(pageNum, PAGE_SIZE));
+  },
+  deleteById(item) {
+    console.log(item._id)
+    dispatch(actionCreators.deleteById(item._id));
   }
 })
 

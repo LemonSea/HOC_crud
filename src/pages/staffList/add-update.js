@@ -80,18 +80,18 @@ class StaffAddUpdate extends Component {
     this.props.form.validateFields((error, value) => {
       if (!error) {
         const imgs = this.pw.current.getImgs()
-        // if(this.state.selectOption) {
         let formData = {
           name: value.name,
           // staffStatus: this.state.selectOption,
           staffStatus: value.staffStatus,
           company: '5e8157afe156e748b48370a5', //*
           costHour: value.costHour,
-          status: this.props.location.state ? this.props.location.state.item : 0,
+          status: this.props.location.state ? this.props.location.state.item.status : 0,
           workNumber: value.workNumber,
           IDCard: value.IDCard,
           imgs,
-          gender: this.state.radioValue,
+          gender: value.gender,
+          // gender: this.state.radioValue,
           age: value.age,
           // inductionTime: this.state.inductionTime,
           inductionTime: value.inductionTime,
@@ -99,20 +99,17 @@ class StaffAddUpdate extends Component {
           star: this.state.star,
           introduction: value.introduction,
         }
-        // const _id = this.props.location.state.item._id;
-        // alert('submit')
         console.log('formData', formData)
         if (this.props.location.state) {
           console.log('update')
-          // const _id = this.props.location.state.item._id;
+          const _id = this.props.location.state.item._id;
+          this.props.editStaff(_id, formData)
+          this.props.history.push('/staff/staff')
         } else {
           console.log('add')
           this.props.addStaff(formData)
           this.props.history.push('/staff/staff')
-        }
-        // } else {
-        //   alert('请选择员工类型！')
-        // }        
+        } 
       }
     })
   }
@@ -125,7 +122,8 @@ class StaffAddUpdate extends Component {
   componentWillMount() {
     const item = this.props.location.state
     this.isUpdate = !!item
-    this.item = item ? item.item : {}
+    this.item = item ? item.item : { staffStatus: { _id:'请输入员工类型！' } }
+    
     // console.log('item', item)
 
 
@@ -149,7 +147,8 @@ class StaffAddUpdate extends Component {
     const { star } = this.state;
 
     const { isUpdate, item } = this
-    // console.log('item', item)
+    console.log('item', item)
+    // console.log('staffStatus', item.staffStatus._id)
 
     // 左侧
     const title = (
@@ -176,7 +175,8 @@ class StaffAddUpdate extends Component {
           {/* select */}
           <Item label='员工类型'>
             {getFieldDecorator('staffStatus', {
-              initialValue: item ? item.staffStatus : "选择员工类型",
+              initialValue: item.staffStatus._id,
+              // initialValue: item ? item.staffStatus._id : "请输入员工类型",
               rules: [{ required: true, message: '必须输入员工类型!' }],
             })(
               <Select style={{ width: 410 }} onChange={this.handleSelectChange}>
@@ -249,7 +249,7 @@ class StaffAddUpdate extends Component {
           <Item label='星级:'>            
           {getFieldDecorator('star', {
               initialValue: star,
-              // rules: [{ required: true, message: '必须输入员工类型!' }],
+              // rules: [{ required: true, message: '必须输入星级!' }],
             })(
             <span>
               <Rate tooltips={desc} onChange={this.handleRateChange} value={star} />
@@ -280,6 +280,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   addStaff(data) {
     dispatch(actionCreators.addStaff(data));
+  },
+  editStaff(_id, data) {
+    dispatch(actionCreators.editStaff(_id, data));
   },
 })
 

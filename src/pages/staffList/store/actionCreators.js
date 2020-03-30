@@ -157,29 +157,53 @@ export const addStaff = (data) => {
         }
     }
 }
-// // 修改内容
-// export const editStaffStatus = (_id, formData) => {
-//     return async (dispatch) => {
-//         try {
-//             const req = await axiosAuthInstance({
-//                 method: "PUT",
-//                 headers: { 'Content-type': 'application/json', },
-//                 url: 'staffStatus',
-//                 data: {
-//                     _id: _id,
-//                     data: formData
-//                 },
-//             })
-//             if (req.status === 0) {
-//                 console.log(req)
-//                 // dispatch(setEditStaffStatus(req.data.record))
-//                 dispatch(handleCancelStatus())
-//             } else {
-//                 alert('修改失败！')
-//                 dispatch(handleCancelStatus())
-//             }
-//         } catch (error) {
-//             console.log('请求出错！', error)
-//         }
-//     }
-// }
+// 修改内容
+export const editStaff = (_id, formData) => {
+    return async (dispatch) => {
+        try {
+            const req = await axiosAuthInstance({
+                method: "PUT",
+                headers: { 'Content-type': 'application/json', },
+                url: 'staff/admin',
+                data: {
+                    _id: _id,
+                    data: formData
+                },
+            })
+            if (req.status === 0) {
+                console.log(req)
+                alert('创建成功！')
+            } else {
+                alert('创建失败！')
+            }
+        } catch (error) {
+            console.log('请求出错！', error)
+        }
+    }
+}
+// 删除内容
+export const deleteById = (_id) => {
+    return async (dispatch) => {
+        try {
+            const req = await axiosAuthInstance({
+                method: "DELETE",
+                headers: { 'Content-type': 'application/json', },
+                url: 'staff/admin',
+                data: {
+                    "id": _id
+                }
+            })
+            if (req.status === 0) {
+                console.log(req)
+                alert('删除成功！')
+                // dispatch(setEditStaffStatus(req.data.record))
+                // dispatch(handleCancelStatus())
+            } else {
+                alert('删除成功！')
+                // dispatch(handleCancelStatus())
+            }
+        } catch (error) {
+            console.log('请求出错！', error)
+        }
+    }
+}
