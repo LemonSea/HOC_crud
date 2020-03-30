@@ -12,9 +12,12 @@ import './style.less';
 */
 // 首页信息
 import Home from '../home';
+
+import Authorities from '../authorities/authorities'
 import Role from '../role/role';
-import Authority from '../role/authority';
+
 import Company from '../company/company';
+
 import Staff from '../staffList/staff';
 import StaffStatus from '../staff/staffStatus/index';
 
@@ -41,11 +44,11 @@ function Main(props) {
                     <Content style={{ margin:20, backgroundColor: '#fff' }}>
                         <Switch>
                             <Route path='/home' component={Home}></Route>
-                            <Route path='/company/list' component={Company}></Route>
+                            <Route path='/company/Company' component={Company}></Route>
                             <Route path='/staff/staff' component={Staff}></Route>
                             <Route path='/staff/staffStatus' component={StaffStatus}></Route>
                             <Route path='/role/role' component={Role}></Route>
-                            <Route path='/role/authority' component={Authority}></Route>
+                            <Route path='/role/authority' component={Authorities}></Route>
                             {/* 如果上面没有匹配到，就返回Home */}
                             {/* <Redirect to='/home' /> */}
                         </Switch>

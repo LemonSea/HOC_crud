@@ -27,7 +27,8 @@ function Header(props) {
             if (item.key === path) {
                 title = item.title;
             } else if (item.children) {
-                const cItem = item.children.find(cItem => cItem.key === path)
+                const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
+                // const cItem = item.children.find(cItem => cItem.key === path)
                 if (cItem) {
                     title = cItem.title;
                 }

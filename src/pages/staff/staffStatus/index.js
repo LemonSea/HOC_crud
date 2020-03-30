@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
+import moment from 'moment';
 
 import { Card, Table, Button, Icon, Modal } from 'antd';
 import LinkButton from '../../../components/link-button';
@@ -35,6 +36,7 @@ class StaffStatus extends Component {
         title: '创建时间',
         dataIndex: 'createTime',
         key: 'createTime',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '操作',

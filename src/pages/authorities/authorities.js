@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { actionCreators } from './store';
-import moment from 'moment';
+// import { actionCreators } from './store';
 
 import {
   Card,
@@ -9,8 +8,7 @@ import {
   Input,
   Button,
   Icon,
-  Table,
-  Modal
+  Table
 } from 'antd';
 import LinkButton from '../../components/link-button/index';
 import { PAGE_SIZE } from '../../utils/constant';
@@ -18,7 +16,7 @@ import { PAGE_SIZE } from '../../utils/constant';
 const Option = Select.Option;
 
 // Product 的默认子路由组件
-class Temp extends Component {
+class Authorities extends Component {
 
   render() {
     // dispatch to props
@@ -29,7 +27,7 @@ class Temp extends Component {
     // const listJS = list ? list.toJS() : [];
 
     return (
-      <div>temp</div>
+      <div>Authorities</div>
     )
   }
 }
@@ -43,4 +41,4 @@ const mapDispatchToProps = (dispatch) => ({
 
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Temp))
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Authorities))
