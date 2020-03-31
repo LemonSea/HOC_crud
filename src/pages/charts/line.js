@@ -1,0 +1,78 @@
+import React, { Component } from "react";
+import {
+  Button,
+  Card
+} from 'antd';
+import ReactEcharts from 'echarts-for-react';
+
+export default class Line extends Component {
+
+  state = {
+    // 销量数组
+    sales: [5, 20, 36, 10, 10, 20],
+    // 库存...
+    stores: [6, 25, 45, 40, 6, 8]
+  }
+
+  update = () => {
+    this.setState(state => ({
+      sales: state.sales.map(sale => sale + 1),
+      stores: state.stores.reduce((pre, store) => {
+        pre.push(store - 1)
+        return pre;
+      }, []),
+    }))
+  }
+
+  /**
+   * 返回柱状图配置项
+   */
+  getOption = (sales, stores) => {
+    return (
+      {
+        // 标题
+        title: {
+          text: 'ECharts 入门示例'
+        },
+        tooltip: {},
+        legend: {
+          data: ['销量', '库存']
+        },
+        xAxis: {
+          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+        },
+        yAxis: {},
+        series: [
+          {
+            name: '销量',
+            type: 'line',
+            data: sales
+          },
+          {
+            name: '库存',
+            type: 'line',
+            data: stores
+          }
+        ]
+      }
+    )
+  }
+
+  render() {
+
+    const { sales, stores } = this.state
+
+    return (
+      <div>
+        <Card>
+          <Button type='primary' onClick={this.update}>更新</Button>
+        </Card>
+
+        <Card title='折线图-示例'>
+          {/* render echarts option. */}
+          <ReactEcharts option={this.getOption(sales, stores)} />
+        </Card>
+      </div>
+    )
+  }
+}

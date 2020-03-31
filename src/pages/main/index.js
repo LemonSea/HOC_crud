@@ -15,13 +15,23 @@ import Home from '../home';
 
 import User from '../user/user';
 
+// 角色授权与用户角色管理
 import Authorities from '../authorities/authorities'
 import Role from '../role/role';
 
 import Company from '../company/company';
 
+// 员工状态与员工管理
 import Staff from '../staffList/staff';
 import StaffStatus from '../staff/staffStatus/index';
+
+// 图表示例
+import Bar from '../charts/bar';
+import Line from '../charts/line';
+import Pie from '../charts/pie';
+
+// 404 界面
+import NotFound from '../not-found/not-found';
 
 const { Footer, Sider, Content } = Layout;
 
@@ -45,18 +55,27 @@ function Main(props) {
                     </Header>
                     <Content style={{ margin:20, backgroundColor: '#fff' }}>
                         <Switch>
+                            <Redirect exact from='/' to='/home' />
                             <Route path='/home' component={Home}></Route>
+
                             <Route path='/user' component={User}></Route>
+
                             <Route path='/company/Company' component={Company}></Route>
+
                             <Route path='/staff/staff' component={Staff}></Route>
                             <Route path='/staff/staffStatus' component={StaffStatus}></Route>
+
                             <Route path='/role/role' component={Role}></Route>
                             <Route path='/role/authority' component={Authorities}></Route>
-                            {/* 如果上面没有匹配到，就返回Home */}
-                            <Redirect to='/home' />
+
+                            <Route path='/chart/Bar' component={Bar}></Route>
+                            <Route path='/chart/Line' component={Line}></Route>
+                            <Route path='/chart/pie' component={Pie}></Route>
+
+                            <Route component={NotFound} />
                         </Switch>
                     </Content>
-                    <Footer style={{ textAlign: 'center', color: '#777' }}>Footer</Footer>
+                    <Footer style={{ textAlign: 'center', color: '#777' }}>推荐谷歌浏览器 打开效果更佳</Footer>
                 </Layout>
             </Layout>
         )
