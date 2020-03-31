@@ -17,7 +17,7 @@ import {
 import LinkButton from '../../components/link-button/index';
 import { PAGE_SIZE } from '../../utils/constant';
 
-import AddForm from './add-form';
+import AuthForm from './auth-form';
 import EditForm from './edit-form';
 
 import { actionCreators as roleActionCreators } from '../role/store';
@@ -65,7 +65,7 @@ class Authorities extends PureComponent {
                 type={status === 0 ? 'primary' : 'danger'}
                 onClick={() => this.changeStatus(_id, newStatus, this.props.pageNum)}
               >
-              {status === 0 ? '启用该账号' : '冻结该账号'}
+                {status === 0 ? '启用该账号' : '冻结该账号'}
               </Button>
             </span>
           )
@@ -226,6 +226,14 @@ class Authorities extends PureComponent {
             管理角色
         </Button>
         </span>
+        <span>
+          <Button
+            style={{marginLeft: 20}}
+            type='primary'
+            onClick={() => { this.setState({ showStatus: 2 }) }}
+            disabled={!item._id}
+          >查看权限</Button>
+        </span>
         {/* <span>
           <Button
             disabled={!item._id}
@@ -241,10 +249,10 @@ class Authorities extends PureComponent {
     // 右侧
     const extra = (
       // <Button type='primary' onClick= {()=> {console.log("delete")}}>
-      <Button 
-        type='primary' 
+      <Button
+        type='primary'
         disabled={!item._id}
-        onClick={() => {this.delete(item._id, pageNum)}}
+        onClick={() => { this.delete(item._id, pageNum) }}
       >
         <Icon type='delete' />
         删除用户
@@ -253,7 +261,7 @@ class Authorities extends PureComponent {
 
     return (
       <Card title={title} extra={extra}>
-      {/* <Card title={title}> */}
+        {/* <Card title={title}> */}
         <Table
           bordered={true}
           rowKey='_id'
@@ -270,19 +278,26 @@ class Authorities extends PureComponent {
           onRow={this.onRow}
         ></Table>
 
-        {/* <Modal
-          title="添加分类"
-          visible={showStatus === 1}
+        <Modal
+          title="查看权限"
+          visible={showStatus === 2}
           onOk={() => {
-            // addStaffStatus(creatorJS, this.form);
-            // getStaffStatusList();
+            this.setState({ showStatus: 0 })
+            // this.updateRole(creatorJS, this.form);
+            // getList()
           }}
-          onCancel={() => this.setState({showStatus: 0})}
+          onCancel={() => {
+            this.setState({ showStatus: 0 })
+            // this.form.resetFields();
+          }}
         >
-          <AddForm
-            setForm={(form) => { this.form = form }}
+          <AuthForm
+            item={item.role}
+            list={this.props.menuList}
+            // ref={this.auth}
+          // setForm={(form) => { this.form = form }}
           />
-        </Modal> */}
+        </Modal>
 
         <Modal
           title="管理角色"
@@ -310,11 +325,12 @@ const mapStateToProps = (state) => ({
   total: state.getIn(['authoritiesReducer', 'total']),
   pageNum: state.getIn(['authoritiesReducer', 'pageNum']),
   roles: state.getIn(['roleReducer', 'list']),
+  menuList: state.getIn(['menuList', 'menuList', 'menuList']),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   getList(pageNum, searchType, searchName) {
-    console.log('getList pageNum',pageNum)
+    console.log('getList pageNum', pageNum)
     dispatch(actionCreators.reqList(pageNum, PAGE_SIZE));
     // if (searchName) {
     //   dispatch(actionCreators.searchList(pageNum, PAGE_SIZE, searchType, searchName));
