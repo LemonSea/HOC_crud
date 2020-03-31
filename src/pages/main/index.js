@@ -13,6 +13,8 @@ import './style.less';
 // 首页信息
 import Home from '../home';
 
+import User from '../user/user';
+
 import Authorities from '../authorities/authorities'
 import Role from '../role/role';
 
@@ -44,13 +46,14 @@ function Main(props) {
                     <Content style={{ margin:20, backgroundColor: '#fff' }}>
                         <Switch>
                             <Route path='/home' component={Home}></Route>
+                            <Route path='/user' component={User}></Route>
                             <Route path='/company/Company' component={Company}></Route>
                             <Route path='/staff/staff' component={Staff}></Route>
                             <Route path='/staff/staffStatus' component={StaffStatus}></Route>
                             <Route path='/role/role' component={Role}></Route>
                             <Route path='/role/authority' component={Authorities}></Route>
                             {/* 如果上面没有匹配到，就返回Home */}
-                            {/* <Redirect to='/home' /> */}
+                            <Redirect to='/home' />
                         </Switch>
                     </Content>
                     <Footer style={{ textAlign: 'center', color: '#777' }}>Footer</Footer>

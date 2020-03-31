@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import { Card, Table, Button, Icon, Modal } from 'antd';
 import LinkButton from '../../../components/link-button';
+import { PAGE_SIZE } from '../../../utils/constant';
 
 import AddForm from './add-form';
 import EditForm from './edit-form';
@@ -104,7 +105,7 @@ class StaffStatus extends Component {
           loading={loading}
           dataSource={dataSource}
           columns={this.columns}
-          pagination={{ defaultPageSize: 5, showQuickJumper: true }}
+          pagination={{ defaultPageSize: PAGE_SIZE, showQuickJumper: true }}
         />;
 
         <Modal

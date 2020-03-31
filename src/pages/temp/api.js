@@ -48,3 +48,17 @@ export const reqDeleteRole = (_id) => {
         console.log('请求出错！', error)
     }
 }
+export const reqChangeStatus = (_id) => {
+    try {
+        return axiosAuthInstance({
+            method: "DELETE",
+            headers: { 'Content-type': 'application/json', },
+            url: 'role',
+            data: {
+                _id
+            },
+        })
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}

@@ -67,14 +67,14 @@ class Role extends Component {
     ];
   }
 
-  delete = (deleteRole) => {
+  delete = () => {
     Modal.confirm({
       title: '确定删除该角色吗?',
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
-      onOk() {
-        deleteRole();
+      onOk: () => {
+        this.deleteRole();
       },
       // onCancel() {
       //   console.log('Cancel');
