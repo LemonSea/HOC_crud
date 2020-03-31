@@ -19,6 +19,10 @@ import {
 import LinkButton from '../../components/link-button/index';
 import { PAGE_SIZE } from '../../utils/constant';
 
+import * as storageUser from '../../utils/storageUser';
+import * as storageToken from '../../utils/storageToken';
+import { actionCreators as layoutActionCreators } from '../login/store'
+
 const Option = Select.Option;
 
 // Product 的默认子路由组件
@@ -121,16 +125,27 @@ class Role extends Component {
  /**
    * 更新角色权限
    */
-  updateRole = async () => {
+  updateRole = async (creator) => {
     const item = this.state.item;
+    // console.log('updateRole creator', creator.role._id)
+    // console.log('updateRole item', item._id)
     const menu = this.auth.current.getMenus()
     item.menu = menu;
-    console.log(item.menu)
+    // console.log(item.menu)
     const result = await reqUpdateRole(item._id, item.menu)
     if (result.status === 0) {
-      message.success('修改角色权限成功!');
-      this.setState({ isShowAuth: false });
-      this.props.getList()
+      // 如果设置的是自己角色的权限，则强制退出
+      if(creator.role._id === item._id) {
+        // storageUser.removeUser()
+        // storageToken.removeToken()
+        // this.props.history.replace('/login');
+        this.props.layoutDispatch();
+        message.success('当前用户角色修改，重新登录！');
+      } else {
+        message.success('修改角色权限成功!');
+        this.setState({ isShowAuth: false });
+        this.props.getList()
+      }
     } else {
       message.warn('修改角色权限失败!');
     }
@@ -193,7 +208,15 @@ class Role extends Component {
           pagination={{
             defaultPageSize: PAGE_SIZE,
           }}
-          rowSelection={{ type: 'radio', selectedRowKeys: [item._id] }}
+          rowSelection={{ 
+            type: 'radio', 
+            selectedRowKeys: [item._id],
+            onSelect: (item) => {
+              this.setState({
+                item
+              })
+            }
+          }}
           onRow={this.onRow}
         />
 
@@ -249,7 +272,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getList() {
     dispatch(actionCreators.getList());
-  }
+  },
+  layoutDispatch() {
+    dispatch(layoutActionCreators.postLayoutRequest());
+}
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(React.memo(Role))

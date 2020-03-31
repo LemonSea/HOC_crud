@@ -43,6 +43,11 @@ class Authorities extends PureComponent {
   initColumns = () => {
     this.columns = [
       {
+        title: '用户账号',
+        dataIndex: 'account',
+        key: 'account',
+      },
+      {
         title: '用户名称',
         dataIndex: 'nickname',
         key: 'nickname',
@@ -274,7 +279,15 @@ class Authorities extends PureComponent {
             showQuickJumper: true,
             onChange: (pageNum) => { getList(pageNum) }
           }}
-          rowSelection={{ type: 'radio', selectedRowKeys: [item._id] }}
+          rowSelection={{ 
+            type: 'radio', 
+            selectedRowKeys: [item._id],
+            onSelect: (item) => {
+              this.setState({
+                item
+              })
+            }
+          }}
           onRow={this.onRow}
         ></Table>
 

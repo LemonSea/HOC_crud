@@ -166,6 +166,7 @@ class StaffHome extends Component {
           dataSource={dataSource}
           columns={this.columns}
           pagination={{
+            current: this.props.pageNum,
             total,
             defaultPageSize: PAGE_SIZE,
             showQuickJumper: true,
