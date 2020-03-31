@@ -18,3 +18,34 @@ export const reqChangeStatus = (_id, status) => {
         console.log('请求出错！', error)
     }
 }
+export const reqChangeRole = (_id, role) => {
+    try {
+        console.log('_id, role', _id, role)
+        return axiosAuthInstance({
+            method: "PUT",
+            headers: { 'Content-type': 'application/json', },
+            url: 'users/admin/role',
+            data: {
+                _id,
+                role
+            },
+        })
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}
+
+export const reqDelete = (_id) => {
+    try {
+        return axiosAuthInstance({
+            method: "DELETE",
+            headers: { 'Content-type': 'application/json', },
+            url: 'users/admin',
+            data: {
+                _id
+            },
+        })
+    } catch (error) {
+        console.log('请求出错！', error)
+    }
+}
