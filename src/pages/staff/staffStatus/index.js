@@ -106,7 +106,7 @@ class StaffStatus extends Component {
           dataSource={dataSource}
           columns={this.columns}
           pagination={{ defaultPageSize: PAGE_SIZE, showQuickJumper: true }}
-        />;
+        />
 
         <Modal
           title="添加分类"

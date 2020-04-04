@@ -17,7 +17,7 @@ export default (state = defaultState, action) => {
             return state.merge({
                 list: action.data,
                 loading: false
-            });;
+            });
         case actionTypes.SHOWADD_STATUS:
             return state.set('showStatus', action.data);
         case actionTypes.SHOWSTATUS_CANCEL:

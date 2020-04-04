@@ -3,10 +3,15 @@ import { combineReducers } from 'redux-immutable';
 // 导入分仓库的 reducer
 import { reducer as loginReducer } from '../pages/login/store';
 import { reducer as menuListReducer } from '../components/leftNav/store';
-import { reducer as staffStatusReducer } from '../pages/staff/staffStatus/store';
+
 import { reducer as authoritiesReducer } from '../pages/authorities/store';
-import { reducer as staffReducer } from '../pages/staffList/store';
 import { reducer as roleReducer } from '../pages/role/store';
+
+import { reducer as staffStatusReducer } from '../pages/staff/staffStatus/store';
+import { reducer as staffReducer } from '../pages/staffList/store';
+
+import { reducer as companyReducer } from '../pages/company/store';
+import { reducer as officerReducer } from '../pages/officer/store';
 // import { reducer as articleStatusReducer } from '../pages/articleManage/articleStatusManage/store';
 // import { reducer as articleTypeReducer } from '../pages/articleManage/articleTypeManage/store';
 
@@ -21,7 +26,9 @@ const reducer = combineReducers({
     staffStatusList: staffStatusReducer,
     authoritiesReducer,
     staffReducer,
-    roleReducer
+    roleReducer,
+    companyReducer,
+    officerReducer
 })
 
 export default reducer

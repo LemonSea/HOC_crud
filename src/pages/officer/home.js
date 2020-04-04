@@ -25,7 +25,7 @@ import { actionCreators as roleActionCreators } from '../role/store';
 const Option = Select.Option;
 
 // Product 的默认子路由组件
-class company extends PureComponent {
+class OfficerHome extends PureComponent {
 
   constructor(props) {
     super(props)
@@ -43,75 +43,77 @@ class company extends PureComponent {
   initColumns = () => {
     this.columns = [
       {
-        title: '公司名称',
-        dataIndex: 'name',
-        key: 'name',
+        title: '账号',
+        dataIndex: 'Officer[account]',
+        key: 'Officer[account]',
       },
       {
-        title: '公司负责人',
+        title: '名称',
         dataIndex: 'Officer[nickname]',
         key: 'Officer[nickname]',
       },
       {
-        title: '公司地址',
-        dataIndex: 'address',
-        key: 'address',
-      },
-      {
-        title: '员工数量',
-        dataIndex: 'staffCount',
-        key: 'staffCount',
-      },
-      {
-        title: '公司状态',
-        // dataIndex: 'status',
-        // key: 'status',
+        title: '性别',
         render: (item) => {
-          let text
-          const { status, _id } = item;
-          if(status === 0) {
-            text = '待审核'
-          } else if(status === 1) {
-            text = '审核通过'
-          } else {
-            text = '审核不通过'
-          }
+          const { gender } = item.Officer;
           return (
             <span>
-              <span>
-                当前状态：{text}
-              </span>
+              <span >{gender === 0 ? '女' : '男'}</span>
             </span>
           )
         }
       },
-      // {
-      //   title: '创建时间',
-      //   dataIndex: 'createTime',
-      //   key: 'createTime',
-      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      // },
+      {
+        title: '对应公司',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: '账号状态',
+        render: (item) => {
+          const { status, _id } = item.Officer;
+          const newStatus = status === 0 ? 1 : 0;
+          return (
+            <span>
+              <span style={{ marginRight: 30, color: status === 0 ? 'red' : 'blue' }}>当前状态：{status === 0 ? '冻结' : '启用'}</span>
+              <Button
+                style={{ marginRight: -30 }}
+                type={status === 0 ? 'primary' : 'danger'}
+                onClick={() => this.changeStatus(_id, newStatus, this.props.pageNum)}
+              >
+                {status === 0 ? '启用该账号' : '冻结该账号'}
+              </Button>
+            </span>
+          )
+        }
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createTime',
+        key: 'createTime',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
     ];
   }
 
   /**
-   * 审核不通过
+   * 修改账号状态（0：冻结，1：启用）
    */
   changeStatus = (_id, status, pageNum) => {
-    const text = status === 1 ? '通过' : '不通过'
+    const text = status === 0 ? '冻结' : '启用'
     Modal.confirm({
-      title: `确定${text}该公司审核吗?`,
+      title: `确定${text}该账号吗?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk: async () => {
         const result = await reqChangeStatus(_id, status)
-        // console.log('result', result)
+        console.log('changeStatus to', status)
         if (result.status === 0) {
-          message.success('审核完成!');
+          message.success('修改账号状态成功!');
           this.props.getList(pageNum)
         } else {
-          message.warn('审核失败!');
+          message.warn('修改账号状态失败!');
         }
       },
       // onCancel() {
@@ -119,7 +121,6 @@ class company extends PureComponent {
       // },
     });
   }
-
   /**
    * 删除账号
    */
@@ -198,66 +199,39 @@ class company extends PureComponent {
         <span>
           <Button
             icon="edit"
-            type='primary'
+            type='danger'
             disabled={!item._id}
-            // onClick={() => this.setState({ showStatus: 1 })}
-            onClick={() => this.changeStatus(item._id, 1, this.props.pageNum)}
+            onClick={() => { this.delete(item._id, pageNum) }}
           >
-            审核通过
+            删除用户
         </Button>
         </span>
-        <span>
-          <Button
-            icon="edit"
-            style={{marginLeft: 20}}
-            type='danger'
-            // onClick={() => { this.setState({ showStatus: 2 }) }}
-            onClick={() => this.changeStatus(item._id, 2, this.props.pageNum)}
-            disabled={!item._id}
-          >审核不通过</Button>
-        </span>
-        {/* <span>
-          <Button
-            disabled={!item._id}
-            style={{ marginLeft: 30 }}
-            type={item.status === 0 ? 'primary' : 'danger'}
-            onClick={() => this.changeStatus(item._id, item.status === 0 ? 1 : 0, this.props.pageNum)}
-          >
-            {item.status === 0 ? '启用该账号' : '冻结该账号'}</Button>
-        </span> */}
       </div>
     )
 
     // 右侧
     const extra = (
-      // <Button
-      //   type='primary'
-      //   disabled={!item._id}
-      //   onClick={() => { this.delete(item._id, pageNum) }}
-      // >
-      //   删除
-      // </Button>
+      // <Button type='primary' onClick= {()=> {console.log("delete")}}>
       <div>
-      <Button
-      type='default'
-      disabled={!item._id}
-      // onClick={() => { this.delete(item._id, pageNum) }}
-      onClick={() => this.props.history.push('/company/officerDetail', { item: item.Officer })}
-    >
-      查看公司负责人详情
-    </Button>
+        <Button
+          type='default'
+          disabled={!item._id}
+          // onClick={() => { this.delete(item._id, pageNum) }}
+          onClick={() => this.props.history.push('/company/CompanyDetail', { item: item })}
+        >
+          查看公司详情
+        </Button>
 
-      <Button
-      style={{marginLeft:20}}
-      type='primary'
-      disabled={!item._id}
-      // onClick={() => { this.delete(item._id, pageNum) }}
-      onClick={() => this.props.history.push('/company/CompanyDetail', { item: item })}
-    >
-      查看公司详情
-    </Button>
-
-    </div>
+        <Button
+          style={{ marginLeft: 20 }}
+          type='primary'
+          disabled={!item._id}
+          // onClick={() => { this.delete(item._id, pageNum) }}
+          onClick={() => this.props.history.push('/company/officerDetail', { item: item.Officer })}
+        >
+          查看公司负责人详情
+              </Button>
+      </div>
     )
 
     return (
@@ -275,8 +249,8 @@ class company extends PureComponent {
             showQuickJumper: true,
             onChange: (pageNum) => { getList(pageNum) }
           }}
-          rowSelection={{ 
-            type: 'radio', 
+          rowSelection={{
+            type: 'radio',
             selectedRowKeys: [item._id],
             onSelect: (item) => {
               this.setState({
@@ -322,7 +296,7 @@ class company extends PureComponent {
             setForm={(form) => { this.form = form }}
           />
         </Modal> */}
-      
+
       </Card>
     )
   }
@@ -356,4 +330,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(company))
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(OfficerHome))

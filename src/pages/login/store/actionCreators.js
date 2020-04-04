@@ -38,6 +38,7 @@ export const postLoginRequest = (FormData) => {
                 url: 'users/admin/login',
                 data: FormData,
             })
+            console.log(reqAdminLogin)
             if (reqAdminLogin.status === 0) {
                 // 登录成功 
                 storageUser.removeUser()

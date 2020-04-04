@@ -35,8 +35,8 @@ class StaffHome extends Component {
       },
       {
         title: '所属公司',
-        dataIndex: 'company',
-        key: 'company',
+        dataIndex: 'company[name]',
+        key: 'company[name]',
       },
       {
         title: '价格/小时',
@@ -66,14 +66,14 @@ class StaffHome extends Component {
       {
         title: '状态',
         render: (item) => {
-          const {status, _id } = item;
+          const { status, _id } = item;
           const newStatus = status === 0 ? 1 : 0;
           // console.log(item)
           return (
             <span>
-              <span style={{marginRight: 30}}>当前状态：{status === 0 ? '空闲' : '忙碌'}</span>
+              <span style={{ marginRight: 30 }}>当前状态：{status === 0 ? '空闲' : '忙碌'}</span>
               <Button
-                style={{marginRight: -30}}
+                style={{ marginRight: -30 }}
                 type={status === 0 ? 'danger' : 'primary'}
                 onClick={() => this.props.changeStaffStatus(_id, newStatus, this.props.pageNum)}
               >{status === 0 ? '开始工作' : '工作完成'}</Button>
@@ -91,12 +91,12 @@ class StaffHome extends Component {
               onClick={() => this.props.history.push('/staff/staff/detail', { item })}
             >详情</LinkButton>
 
-            <LinkButton 
+            <LinkButton
               onClick={() => this.props.history.push('/staff/staff/addUpdate', { item })}
             >修改</LinkButton>
             <LinkButton onClick={() => {
               this.props.deleteById(item)
-              this.props.getList();
+              this.props.getList(this.props.pageNum, '', '',this.props.currentUser.toJS());
             }
             }>删除</LinkButton>
           </span>
@@ -111,7 +111,7 @@ class StaffHome extends Component {
   }
 
   componentDidMount() {
-    this.props.getList(1)
+    this.props.getList(1, '', '', this.props.currentUser.toJS())
   }
 
   render() {
@@ -144,7 +144,7 @@ class StaffHome extends Component {
         />
         <Button
           type='primary'
-          onClick={() => { getList(1, searchType, searchName) }}
+          onClick={() => { getList(1, searchType, searchName, this.props.currentUser.toJS()) }}
         >搜索</Button>
       </span>
     )
@@ -170,7 +170,7 @@ class StaffHome extends Component {
             total,
             defaultPageSize: PAGE_SIZE,
             showQuickJumper: true,
-            onChange: (pageNum) => { getList(pageNum, searchType, searchName) }
+            onChange: (pageNum) => { getList(pageNum, searchType, searchName, this.props.currentUser.toJS()) }
           }}
         ></Table>
       </Card>
@@ -182,6 +182,7 @@ class StaffHome extends Component {
 const mapStateToProps = (state) => ({
   // 不要再这里将数据toJS,不然每次diff比对props的时候都是不一样的引用，还是导致不必要的重渲染, 属于滥用immutable
   // staff status's list
+  currentUser: state.getIn(['userList', 'userItem', 'user']),
   list: state.getIn(['staffReducer', 'list']),
   // list loading ...
   loading: state.getIn(['staffReducer', 'loading']),
@@ -193,12 +194,17 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getList(pageNum, searchType, searchName) {
+  getList(pageNum, searchType, searchName, user) {
+    console.log( user.isHead)
+    let _id = '';
+    if(user.isHead){
+      _id = user._id
+    }
     if (searchName) {
-      dispatch(actionCreators.searchList(pageNum, PAGE_SIZE, searchType, searchName));
+      dispatch(actionCreators.searchList(pageNum, PAGE_SIZE, searchType, searchName, _id));
     }
     else {
-      dispatch(actionCreators.reqList(pageNum, PAGE_SIZE));
+      dispatch(actionCreators.reqList(pageNum, PAGE_SIZE, _id));
     }
   },
   changeSearchType(value) {

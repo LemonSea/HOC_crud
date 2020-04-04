@@ -16,6 +16,7 @@ import {
 } from 'antd';
 import LinkButton from '../../components/link-button/index';
 import PicturesWall from './pictures-wall';
+import { reqCompany } from './api';
 
 import { actionCreators } from './store';
 
@@ -73,15 +74,17 @@ class StaffAddUpdate extends Component {
    * 提交
    */
   submit = () => {
-    this.props.form.validateFields((error, value) => {
+    this.props.form.validateFields(async (error, value) => {
       if (!error) {
         const imgs = this.pw.current.getImgs()
-        console.log('pw', imgs)
+        // console.log('pw', imgs)
+        let record =await reqCompany(this.props.currentUser.toJS()._id)
+        console.log('company',record.data )
         let formData = {
           name: value.name,
           // staffStatus: this.state.selectOption,
           staffStatus: value.staffStatus,
-          company: '5e8157afe156e748b48370a5', //*
+          company: record.data._id, //*
           costHour: value.costHour,
           status: this.props.location.state ? this.props.location.state.item.status : 0,
           workNumber: value.workNumber,
@@ -132,6 +135,7 @@ class StaffAddUpdate extends Component {
   }
 
   render() {
+    console.log(this.props.currentUser.toJS())
 
     const { staffType } = this.props;
     const staffTypeJS = staffType ? staffType.toJS() : [];
@@ -268,6 +272,7 @@ class StaffAddUpdate extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  currentUser: state.getIn(['userList', 'userItem', 'user']),
   staffType: state.getIn(['staffReducer', 'staffType']),
 })
 

@@ -19,7 +19,11 @@ import User from '../user/user';
 import Authorities from '../authorities/authorities'
 import Role from '../role/role';
 
+// 公司管理
 import Company from '../company/company';
+import CompanyDetail from '../company/detail';
+import OfficerHome from '../officer/home';
+import OfficerDetail from '../officer/detail';
 
 // 员工状态与员工管理
 import Staff from '../staffList/staff';
@@ -60,7 +64,10 @@ function Main(props) {
 
                             <Route path='/user' component={User}></Route>
 
-                            <Route path='/company/Company' component={Company}></Route>
+                            <Route path='/company/company' component={Company}></Route>
+                            <Route path='/company/CompanyDetail' component={CompanyDetail}></Route>
+                            <Route path='/company/officerInfo' component={OfficerHome}></Route>
+                            <Route path='/company/officerDetail' component={OfficerDetail}></Route>
 
                             <Route path='/staff/staff' component={Staff}></Route>
                             <Route path='/staff/staffStatus' component={StaffStatus}></Route>
@@ -75,7 +82,7 @@ function Main(props) {
                             <Route component={NotFound} />
                         </Switch>
                     </Content>
-                    <Footer style={{ textAlign: 'center', color: '#777' }}>推荐谷歌浏览器 打开效果更佳</Footer>
+                    <Footer style={{ textAlign: 'center', color: '#777' }}>家政后台管理系统</Footer>
                 </Layout>
             </Layout>
         )

@@ -76,17 +76,26 @@ class StaffDetail extends Component {
             <span className="left">身份证号码：</span>
             <span>{item.IDCard}</span>
           </Item>
+          {/* <Item>
+            <span className="left">员工头像:</span>
+            <span>
+              <img
+                className='staff-img'
+                alt={item.avatar}
+                src={BASE_IMG_URL + item.avatar} ></img>
+            </span>
+          </Item> */}
           <Item>
-            <span className="left">照片:</span>
+            <span className="left">工作照片:</span>
             <span>
               {item.imgs.map((item, index) => {
                 return (
                   // < Option key={item.name} value={item.name}>{item.name}</Option>
                   <img
-                    key={item.name+item.url}
+                    key={item}
                     className='staff-img'
                     alt={item.name}
-                    src={BASE_IMG_URL + item.url} ></img>
+                    src={BASE_IMG_URL + item} ></img>
                 )
               })}
             </span>

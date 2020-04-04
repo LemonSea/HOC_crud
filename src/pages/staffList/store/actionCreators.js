@@ -27,16 +27,17 @@ const staffType = (data) => ({
 
 
 // 获取list数据，一般分页
-export const reqList = (pageNum, pageSize) => {
+export const reqList = (pageNum, pageSize, user) => {
+    console.log('reqList', user)
     return async (dispatch) => {
-        console.log('reqList')
         try {
             const result = await axiosAuthInstance({
                 method: "GET",
                 url: 'staff/admin/list',
                 params: {
                     pageNum: pageNum,
-                    pageSize: pageSize
+                    pageSize: pageSize,
+                    user
                 }
             })
             if (result.status === 0) {
@@ -50,7 +51,7 @@ export const reqList = (pageNum, pageSize) => {
     }
 }
 // 获取 list，搜索分页
-export const searchList = (pageNum, pageSize, searchType, searchName) => {
+export const searchList = (pageNum, pageSize, searchType, searchName, user) => {
     return async (dispatch) => {
         console.log('searchList', searchName)
         try {
@@ -61,7 +62,8 @@ export const searchList = (pageNum, pageSize, searchType, searchName) => {
                     pageNum: pageNum,
                     pageSize: pageSize,
                     searchType,
-                    searchName
+                    searchName,
+                    user
                 }
             })
             if (result.status === 0) {

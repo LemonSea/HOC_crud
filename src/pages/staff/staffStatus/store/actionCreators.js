@@ -40,7 +40,7 @@ export const getStaffStatusList = () => {
         try {
             const result = await axiosAuthInstance({
                 method: "GET",
-                url: 'staffStatus',
+                url: 'staffStatus/type',
             })
             if (result.status === 0) {
                 dispatch(getList(result.data))
