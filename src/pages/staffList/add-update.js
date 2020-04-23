@@ -114,6 +114,7 @@ class StaffAddUpdate extends Component {
         if (this.props.location.state) {
           // console.log('update')
           const _id = this.props.location.state.item._id;
+          console.log('user', _id)
           this.props.editStaff(_id, formData)
           this.props.history.push('/staff/staff')
         } else {
