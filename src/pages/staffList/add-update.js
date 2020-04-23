@@ -16,7 +16,9 @@ import {
 } from 'antd';
 import LinkButton from '../../components/link-button/index';
 import PicturesWall from './pictures-wall';
+import AvatarWall from './avatar-wall';
 import { reqCompany } from './api';
+import city from '../../utils/city.json';
 
 import { actionCreators } from './store';
 
@@ -30,6 +32,7 @@ class StaffAddUpdate extends Component {
   constructor(props) {
     super(props);
     this.pw = React.createRef();
+    this.av = React.createRef();
   }
 
   state = {
@@ -78,8 +81,11 @@ class StaffAddUpdate extends Component {
       if (!error) {
         const imgs = this.pw.current.getImgs()
         // console.log('pw', imgs)
-        let record =await reqCompany(this.props.currentUser.toJS()._id)
-        console.log('company',record.data )
+        const images = this.av.current.getImgs()
+        console.log('imgs: ', imgs);
+
+        let record = await reqCompany(this.props.currentUser.toJS()._id)
+        console.log('company', record.data)
         let formData = {
           name: value.name,
           // staffStatus: this.state.selectOption,
@@ -90,12 +96,16 @@ class StaffAddUpdate extends Component {
           workNumber: value.workNumber,
           IDCard: value.IDCard,
           imgs,
+          avatar :images[0],
           gender: value.gender,
           // gender: this.state.radioValue,
           age: value.age,
           // inductionTime: this.state.inductionTime,
           inductionTime: value.inductionTime,
           address: value.address,
+          workArea: value.workArea,          
+          workAreaStr: value.workArea.join(''),
+          detailWorkAddress: value.detailWorkAddress,
           star: this.state.star,
           introduction: value.introduction,
         }
@@ -110,7 +120,7 @@ class StaffAddUpdate extends Component {
           // console.log('add')
           this.props.addStaff(formData)
           this.props.history.push('/staff/staff')
-        } 
+        }
       }
     })
   }
@@ -123,8 +133,8 @@ class StaffAddUpdate extends Component {
   componentWillMount() {
     const item = this.props.location.state
     this.isUpdate = !!item
-    this.item = item ? item.item : { staffStatus: { _id:'请输入员工类型！' } }
-    
+    this.item = item ? item.item : { staffStatus: { _id: '请输入员工类型！' } }
+
     // console.log('item', item)
 
 
@@ -207,21 +217,30 @@ class StaffAddUpdate extends Component {
               initialValue: item.IDCard,
             })(<Input placeholder='身份证号码' />)}
           </Item>
+
+          {/* PicturesWall */}
+          <Form.Item label='员工头像'>
+            {/* {console.log('picture', item.imgs)} */}
+            <AvatarWall ref={this.av} imgs={[item.avatar]}></AvatarWall>
+            {/* {console.log('picture', item.imgs)}
+              <PicturesWall ref={this.pw} imgs={item.imgs}></PicturesWall> */}
+          </Form.Item>
+
           {/* PicturesWall */}
           <Item label='员工照片'>
-            {console.log('picture', item.imgs)}
+            {/* {console.log('picture', item.imgs)} */}
             <PicturesWall ref={this.pw} imgs={item.imgs}></PicturesWall>
           </Item>
           {/* Radio */}
           <Item label='性别:'>
-          {getFieldDecorator('gender', {
+            {getFieldDecorator('gender', {
               initialValue: item ? item.gender : this.state.radioValue,
               // rules: [{ required: true, message: '必须输入员工类型!' }],
             })(
-            <Radio.Group onChange={this.onRadioChange}>
-              <Radio value={0}>女</Radio>
-              <Radio value={1}>男</Radio>
-            </Radio.Group>)}
+              <Radio.Group onChange={this.onRadioChange}>
+                <Radio value={0}>女</Radio>
+                <Radio value={1}>男</Radio>
+              </Radio.Group>)}
           </Item>
           <Item label='年龄:'>
             {getFieldDecorator('age', {
@@ -241,13 +260,35 @@ class StaffAddUpdate extends Component {
                 style={{ width: 410 }}
               />)}
           </Item>
-          <Item label='家庭地址:'>
+          {/* <Item label='家庭地址:'>
             {getFieldDecorator('address', {
               initialValue: item.address,
             })(<TextArea placeholder='家庭地址' autosize={{ minRows: 2, maxRows: 6 }} />)}
+          </Item> */}
+          <Item label='工作区域： ' >
+            {getFieldDecorator('workArea', {
+              initialValue: item.workArea,
+              rules: [{ required: true, message: '所在地区不能为空!' }]
+            })(
+              <Cascader
+                options={city}
+                onChange={this.onChange}
+                placeholder="-请选择-"
+                showSearch={this.filter}
+              />
+            )}
           </Item>
+
+          {/* <Item label='详细地址： ' >
+            {getFieldDecorator('detailWorkAddress', {
+              // initialValue: '',
+              rules: [{ required: true, message: '详细地址不能为空!' }]
+            })(
+              <Input placeholder="" />
+            )}
+          </Item> */}
           {/* Rate */}
-          <Item label='星级:'>            
+          {/* <Item label='星级:'>            
           {getFieldDecorator('star', {
               initialValue: star,
               // rules: [{ required: true, message: '必须输入星级!' }],
@@ -256,7 +297,7 @@ class StaffAddUpdate extends Component {
               <Rate tooltips={desc} onChange={this.handleRateChange} value={star} />
               {star ? <span className="ant-rate-text">{desc[star - 1]}</span> : ''}
             </span>)}
-          </Item>
+          </Item> */}
           <Item label='员工简介'>
             {getFieldDecorator('introduction', {
               initialValue: item.introduction,

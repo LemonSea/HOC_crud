@@ -87,7 +87,7 @@ class OfficerDetail extends Component {
           </Item>
           <Item>
             <span className="left">手机号码：</span>
-            <span>{item.phone.prefix + item.phone.phone}</span>
+            <span>{item.phone.prefix + '-' + item.phone.phone}</span>
           </Item>
           <Item>
             <span className="left">注册时间：</span>

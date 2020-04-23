@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
-import { reqChangeStatus, reqDelete } from './api';
+import { reqChangeOrder } from './api';
 import moment from 'moment';
 
 import {
@@ -24,8 +24,7 @@ import { actionCreators as roleActionCreators } from '../role/store';
 
 const Option = Select.Option;
 
-// Product 的默认子路由组件
-class company extends PureComponent {
+class order extends PureComponent {
 
   constructor(props) {
     super(props)
@@ -43,46 +42,52 @@ class company extends PureComponent {
   initColumns = () => {
     this.columns = [
       {
-        title: '公司名称',
-        dataIndex: 'name',
-        key: 'name',
+        title: '消费者',
+        dataIndex: 'user[nickname]',
+        key: 'user[nickname]',
       },
       {
-        title: '公司负责人',
-        dataIndex: 'Officer[nickname]',
-        key: 'Officer[nickname]',
+        title: '服务人员',
+        dataIndex: 'employee[name]',
+        key: 'employee[name]',
       },
       {
-        title: '公司地址',
-        // dataIndex: 'address',
-        // key: 'address',
-        render: (item) => {
-          const { areaStr, detailAddress } = item;
-          return (
-            <span>
-              {areaStr + detailAddress}
-            </span>
-          )
-        }
+        title: '对应公司',
+        dataIndex: 'company[name]',
+        key: 'company[name]',
       },
       {
-        title: '员工数量',
-        dataIndex: 'staffCount',
-        key: 'staffCount',
+        title: '预约开始时间',
+        dataIndex: 'startTime',
+        key: 'startTime',
       },
       {
-        title: '公司状态',
+        title: '预约结束时间',
+        dataIndex: 'endTime',
+        key: 'endTime',
+      },
+      {
+        title: '总预约时间',
+        dataIndex: 'countTime[countHours]',
+        key: 'countTime[countHours]',
+      },
+      {
+        title: '订单状态',
         // dataIndex: 'status',
         // key: 'status',
         render: (item) => {
           let text
           const { status, _id } = item;
           if(status === 0) {
-            text = '待审核'
+            text = '待支付'
           } else if(status === 1) {
-            text = '审核通过'
+            text = '已支付，待完成'
+          } else if(status === 2) {
+            text = '已完成，待评论'
+          }else if(status === 3) {
+            text = '完成'
           } else {
-            text = '审核不通过'
+            text = '已取消'
           }
           return (
             <span>
@@ -93,33 +98,33 @@ class company extends PureComponent {
           )
         }
       },
-      // {
-      //   title: '创建时间',
-      //   dataIndex: 'createTime',
-      //   key: 'createTime',
-      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      // },
+      {
+        title: '下单时间',
+        dataIndex: 'firstTime',
+        key: 'firstTime',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
     ];
   }
 
   /**
    * 审核不通过
    */
-  changeStatus = (_id, status, pageNum) => {
-    const text = status === 1 ? '通过' : '不通过'
+  changeStatus = (_id,status,  pageNum) => {
     Modal.confirm({
-      title: `确定${text}该公司审核吗?`,
+      title: `确定该订单已完成?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk: async () => {
-        const result = await reqChangeStatus(_id, status)
-        // console.log('result', result)
+        const result = await reqChangeOrder(_id, status)
+        console.log('result', result)
         if (result.status === 0) {
-          message.success('审核完成!');
-          this.props.getList(pageNum)
+          message.success('订单完成!');
+          console.log(result)
+          this.props.getList(pageNum,'','', this.props.currentUser.toJS())
         } else {
-          message.warn('审核失败!');
+          message.warn('发生了错误!');
         }
       },
       // onCancel() {
@@ -129,24 +134,24 @@ class company extends PureComponent {
   }
 
   /**
-   * 删除账号
+   * 删除订单
    */
   delete = (_id, pageNum) => {
     Modal.confirm({
-      title: `确定删除该账号吗?`,
+      title: `确定删除该订单吗?`,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk: async () => {
         // message.success(this.state.item._id)
-        const result = await reqDelete(_id)
-        console.log('result', result)
-        if (result.status === 0) {
-          message.success('删除成功!');
-          this.props.getList(pageNum)
-        } else {
-          message.warn('删除失败!');
-        }
+        // const result = await reqDelete(_id)
+        console.log('_id', _id)
+        // if (result.status === 0) {
+        //   message.success('删除成功!');
+        //   this.props.getList(pageNum)
+        // } else {
+        //   message.warn('删除失败!');
+        // }
       },
       // onCancel() {
       //   console.log('Cancel');
@@ -182,19 +187,19 @@ class company extends PureComponent {
 
   componentDidMount() {
     // console.log('staffStatus')
-    this.props.getList(1)
-    this.props.getRoleList()
+    this.props.getList(1,'','', this.props.currentUser.toJS())
+    // this.props.getRoleList()
   }
 
   render() {
     // dispatch to props
     const { getList } = this.props;
-    // const { getList, changeSearchType, changeSearchName } = this.props;
 
     // state to props
-    const { list, loading, total, roles, pageNum } = this.props;
+    const { list, loading, total, roles, pageNum,currentUser } = this.props;
     const listJS = list ? list.toJS() : [];
-    const rolesJS = roles ? roles.toJS() : [];
+    const currentUserJS = currentUser ? currentUser.toJS() : [];
+    console.log('currentUserJS',currentUserJS)
 
     const { item, showStatus } = this.state
 
@@ -209,9 +214,9 @@ class company extends PureComponent {
             type='primary'
             disabled={!item._id}
             // onClick={() => this.setState({ showStatus: 1 })}
-            onClick={() => this.changeStatus(item._id, 1, this.props.pageNum)}
+            onClick={() => this.changeStatus(item._id, 2, this.props.pageNum)}
           >
-            审核通过
+            完成订单
         </Button>
         </span>
         <span>
@@ -220,9 +225,9 @@ class company extends PureComponent {
             style={{marginLeft: 20}}
             type='danger'
             // onClick={() => { this.setState({ showStatus: 2 }) }}
-            onClick={() => this.changeStatus(item._id, 2, this.props.pageNum)}
+            onClick={() => this.delete(item._id, this.props.pageNum)}
             disabled={!item._id}
-          >审核不通过</Button>
+          >删除订单</Button>
         </span>
         {/* <span>
           <Button
@@ -246,23 +251,23 @@ class company extends PureComponent {
       //   删除
       // </Button>
       <div>
-      <Button
+      {/* <Button
       type='default'
       disabled={!item._id}
       // onClick={() => { this.delete(item._id, pageNum) }}
       onClick={() => this.props.history.push('/company/officerDetail', { item: item.Officer })}
     >
       查看公司负责人详情
-    </Button>
+    </Button> */}
 
       <Button
       style={{marginLeft:20}}
       type='primary'
       disabled={!item._id}
       // onClick={() => { this.delete(item._id, pageNum) }}
-      onClick={() => this.props.history.push('/company/CompanyDetail', { item: item })}
+      onClick={() => this.props.history.push('/order-detail', { item: item })}
     >
-      查看公司详情
+      查看订单详情
     </Button>
 
     </div>
@@ -280,8 +285,7 @@ class company extends PureComponent {
           pagination={{
             total,
             defaultPageSize: PAGE_SIZE,
-            showQuickJumper: true,
-            onChange: (pageNum) => { getList(pageNum) }
+            showQuickJumper: true,onChange: (pageNum) => { getList(pageNum, '', '', this.props.currentUser.toJS()) }
           }}
           rowSelection={{ 
             type: 'radio', 
@@ -338,30 +342,21 @@ class company extends PureComponent {
 
 
 const mapStateToProps = (state) => ({
-  list: state.getIn(['officerReducer', 'list']),
-  loading: state.getIn(['officerReducer', 'loading']),
-  total: state.getIn(['officerReducer', 'total']),
-  pageNum: state.getIn(['officerReducer', 'pageNum']),
-  roles: state.getIn(['roleReducer', 'list']),
-  menuList: state.getIn(['menuList', 'menuList', 'menuList']),
+  currentUser: state.getIn(['userList', 'userItem', 'user']),
+  list: state.getIn(['orderReducer', 'list']),
+  total: state.getIn(['orderReducer', 'total']),
+  pageNum: state.getIn(['orderReducer', 'pageNum']),
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getList(pageNum, searchType, searchName) {
-    console.log('getList officer')
-    console.log('getList pageNum', pageNum)
-    dispatch(actionCreators.reqList(pageNum, PAGE_SIZE));
-    // if (searchName) {
-    //   dispatch(actionCreators.searchList(pageNum, PAGE_SIZE, searchType, searchName));
-    // }
-    // else {
-    //   dispatch(actionCreators.reqList(pageNum, PAGE_SIZE));
-    // }
-  },
-  getRoleList() {
-    console.log('getRoleList')
-    dispatch(roleActionCreators.getList());
+  getList(pageNum, searchType, searchName, user) {
+    console.log('user.isHead', user)
+    let _id = '';
+    if(user.isHead){
+      _id = user._id
+    }
+    dispatch(actionCreators.reqList(pageNum, PAGE_SIZE,_id));
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(company))
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(order))

@@ -13,7 +13,11 @@ import './style.less';
 // 首页信息
 import Home from '../home';
 
+// 用户管理
 import User from '../user/user';
+// 订单管理
+import Order from '../order/order';
+import OrderDetail from '../order/detail';
 
 // 角色授权与用户角色管理
 import Authorities from '../authorities/authorities'
@@ -63,6 +67,9 @@ function Main(props) {
                             <Route path='/home' component={Home}></Route>
 
                             <Route path='/user' component={User}></Route>
+
+                            <Route path='/order' component={Order}></Route>
+                            <Route path='/order-detail' component={OrderDetail}></Route>
 
                             <Route path='/company/company' component={Company}></Route>
                             <Route path='/company/CompanyDetail' component={CompanyDetail}></Route>

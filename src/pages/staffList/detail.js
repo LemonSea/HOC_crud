@@ -76,7 +76,7 @@ class StaffDetail extends Component {
             <span className="left">身份证号码：</span>
             <span>{item.IDCard}</span>
           </Item>
-          {/* <Item>
+          <Item>
             <span className="left">员工头像:</span>
             <span>
               <img
@@ -84,7 +84,7 @@ class StaffDetail extends Component {
                 alt={item.avatar}
                 src={BASE_IMG_URL + item.avatar} ></img>
             </span>
-          </Item> */}
+          </Item>
           <Item>
             <span className="left">工作照片:</span>
             <span>
@@ -113,8 +113,8 @@ class StaffDetail extends Component {
             <span>{item.inductionTime}</span>
           </Item>
           <Item>
-            <span className="left">家庭地址：</span>
-            <span>{item.address}</span>
+            <span className="left">工作区域：</span>
+            <span>{item.workAreaStr}</span>
           </Item>
           <Item>
             <span className="left">星级:</span>
@@ -122,15 +122,27 @@ class StaffDetail extends Component {
           </Item>
           <Item>
             <span className="left">订单总数</span>
-            <span>{item.orderCount}</span>
+            <span>{item.oneStarOrders + item.twoStarOrders + item.threeStarOrders + item.fourStarOrders + item.fiveStarOrders}</span>
           </Item>
           <Item>
-            <span className="left">好评订单数</span>
-            <span>{item.highPraiseOrder}</span>
+            <span className="left">1星订单数</span>
+            <span>{item.oneStarOrders}</span>
           </Item>
           <Item>
-            <span className="left">差评订单数</span>
-            <span>{item.badReviewOrder}</span>
+            <span className="left">2星订单数</span>
+            <span>{item.twoStarOrders}</span>
+          </Item>
+          <Item>
+            <span className="left">3星订单数</span>
+            <span>{item.threeStarOrders}</span>
+          </Item>
+          <Item>
+            <span className="left">4星订单数</span>
+            <span>{item.fourStarOrders}</span>
+          </Item>
+          <Item>
+            <span className="left">5星订单数</span>
+            <span>{item.fiveStarOrders}</span>
           </Item>
           <Item>
             <span className="left">介绍:</span>

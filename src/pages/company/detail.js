@@ -27,9 +27,9 @@ class OfficerDetail extends Component {
     console.log(item)
 
     let statusText;
-    if(item.status === 0) {
+    if (item.status === 0) {
       statusText = '待审核'
-    } else if(item.status === 1) {
+    } else if (item.status === 1) {
       statusText = '审核通过'
     } else {
       statusText = '审核不通过'
@@ -68,7 +68,7 @@ class OfficerDetail extends Component {
           </Item>
           <Item>
             <span className="left">公司地址:</span>
-            <span>{item.address}</span>
+            <span>{item.areaStr + item.detailAddress}</span>
           </Item>
           <Item>
             <span className="left">公司照片:</span>
@@ -91,15 +91,15 @@ class OfficerDetail extends Component {
           </Item>
           <Item>
             <span className="left">公司客服-1：</span>
-            <span>{item.phone1.prefix1 + item.phone1.phone1}</span>
+            <span>{item.phone1.prefix1 + '-' + item.phone1.phone1}</span>
           </Item>
           <Item>
             <span className="left">公司客服-3：</span>
-            <span>{item.phone2.prefix2 + item.phone2.phone2}</span>
+            <span>{item.phone2.prefix2 + '-' + item.phone2.phone2}</span>
           </Item>
           <Item>
             <span className="left">公司客服-2：</span>
-            <span>{item.phone3.prefix3 + item.phone3.phone3}</span>
+            <span>{item.phone3.prefix3 + '-' + item.phone3.phone3}</span>
           </Item>
           <Item>
             <span className="left">公司员工数量：</span>

@@ -12,6 +12,7 @@ import { reducer as staffReducer } from '../pages/staffList/store';
 
 import { reducer as companyReducer } from '../pages/company/store';
 import { reducer as officerReducer } from '../pages/officer/store';
+import { reducer as orderReducer } from '../pages/order/store';
 // import { reducer as articleStatusReducer } from '../pages/articleManage/articleStatusManage/store';
 // import { reducer as articleTypeReducer } from '../pages/articleManage/articleTypeManage/store';
 
@@ -28,7 +29,8 @@ const reducer = combineReducers({
     staffReducer,
     roleReducer,
     companyReducer,
-    officerReducer
+    officerReducer,
+    orderReducer
 })
 
 export default reducer

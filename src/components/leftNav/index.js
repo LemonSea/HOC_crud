@@ -61,6 +61,7 @@ function LeftNav(props) {
     // 判断当前登录用户对item有哪些权限
     const hasAuth = (item) => {
         const { key, isPublic } = item;
+        // console.log('hasAuth',userJS.role )
         const menus = userJS.role ? userJS.role.menu : [];
         const isSuperAdmin = userJS.isSuperAdmin ? userJS.isSuperAdmin : false;
         /**

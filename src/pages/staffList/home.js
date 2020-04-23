@@ -50,18 +50,14 @@ class StaffHome extends Component {
       },
       {
         title: '订单总数',
-        dataIndex: 'orderCount',
-        key: 'orderCount',
-      },
-      {
-        title: '好评订单数',
-        dataIndex: 'highPraiseOrder',
-        key: 'highPraiseOrder',
-      },
-      {
-        title: '差评订单数',
-        dataIndex: 'badReviewOrder',
-        key: 'badReviewOrder',
+        render: (item) => {
+          const { oneStarOrders, twoStarOrders,threeStarOrders,fourStarOrders,fiveStarOrders } = item;
+          return (
+            <span>
+              {oneStarOrders+twoStarOrders+threeStarOrders+fourStarOrders+fiveStarOrders}
+            </span>
+          )
+        }
       },
       {
         title: '状态',
@@ -71,12 +67,12 @@ class StaffHome extends Component {
           // console.log(item)
           return (
             <span>
-              <span style={{ marginRight: 30 }}>当前状态：{status === 0 ? '空闲' : '忙碌'}</span>
+              <span style={{ marginRight: 30 }}>当前状态：{status === 0 ? '冻结' : '激活'}</span>
               <Button
                 style={{ marginRight: -30 }}
-                type={status === 0 ? 'danger' : 'primary'}
+                type={status === 0 ? 'primary' : 'danger'}
                 onClick={() => this.props.changeStaffStatus(_id, newStatus, this.props.pageNum)}
-              >{status === 0 ? '开始工作' : '工作完成'}</Button>
+              >{status === 0 ? '激活' : '冻结'}</Button>
             </span>
           )
         }
