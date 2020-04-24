@@ -34,6 +34,7 @@ class order extends PureComponent {
       item: {},  // 当前选中项
       isShowAdd: false,  // 是否显示添加界面
       isShowAuth: false,  // 是否显示设置权限界面
+      isOptional: false,
       showStatus: 0
     }
   }
@@ -60,11 +61,13 @@ class order extends PureComponent {
         title: '预约开始时间',
         dataIndex: 'startTime',
         key: 'startTime',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '预约结束时间',
         dataIndex: 'endTime',
         key: 'endTime',
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '总预约时间',
@@ -108,9 +111,9 @@ class order extends PureComponent {
   }
 
   /**
-   * 审核不通过
+   * 完成订单
    */
-  changeStatus = (_id,status,  pageNum) => {
+  changeStatus = (_id, status,  pageNum) => {
     Modal.confirm({
       title: `确定该订单已完成?`,
       okText: 'Yes',
@@ -163,6 +166,15 @@ class order extends PureComponent {
   onRow = (item) => {
     return {
       onClick: event => {  // 点击行
+        if(item.status === 1) {
+          this.setState({
+            isOptional: true
+          })
+        } else {
+          this.setState({
+            isOptional: false
+          })
+        }
         this.setState({
           item
         })
@@ -212,7 +224,7 @@ class order extends PureComponent {
           <Button
             icon="edit"
             type='primary'
-            disabled={!item._id}
+            disabled={!this.state.isOptional}
             // onClick={() => this.setState({ showStatus: 1 })}
             onClick={() => this.changeStatus(item._id, 2, this.props.pageNum)}
           >

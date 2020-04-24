@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actionCreators } from './store';
+import moment from 'moment';
 
 import {
   Card,
@@ -75,12 +76,16 @@ class OrderDetail extends Component {
             <span>{item.employee.name}</span>
           </Item>
           <Item>
+            <span className="left">工号:</span>
+            <span>{item.employee.workNumber}</span>
+          </Item>
+          <Item>
             <span className="left">服务公司:</span>
             <span>{item.company.name}</span>
           </Item>
           <Item>
             <span className="left">服务地址:</span>
-            <span>{item.address}</span>
+            <span>{item.serviceAddress.areaStr + item.serviceAddress.detailAddress}</span>
           </Item>
           <Item>
             <span className="left">消费者电话:</span>
@@ -92,11 +97,11 @@ class OrderDetail extends Component {
           </Item>
           <Item>
             <span className="left">预约开始时间:</span>
-            <span>{item.startTime}</span>
+            <span>{moment(item.startTime).format('YYYY-MM-DD HH:mm:ss')}</span>
           </Item>
           <Item>
             <span className="left">预约结束时间:</span>
-            <span>{item.endTime}</span>
+            <span>{moment(item.endTime).format('YYYY-MM-DD HH:mm:ss')}</span>
           </Item>
           {/* <Item>
             <span className="left">总预约时间:</span>
@@ -112,24 +117,32 @@ class OrderDetail extends Component {
           </Item>
           <Item>
             <span className="left">下单时间：</span>
-            <span>{item.firstTime}</span>
+            <span>{moment(item.placeTime).format('YYYY-MM-DD HH:mm:ss')}</span>
           </Item>
           <Item>
             <span className="left">支付时间：</span>
-            <span>{item.payTime}</span>
+            <span>{item.status === 1 ? 
+            <span>{moment(item.payTime).format('YYYY-MM-DD HH:mm:ss')}</span>
+            : '未支付'}</span>
           </Item>
           <Item>
             <span className="left">完成时间：</span>
-            <span>{item.completionTime}</span>
+            <span>{item.status >= 2 ? 
+            <span>{moment(item.completionTime).format('YYYY-MM-DD HH:mm:ss')}</span>
+            : '未完成' }</span>
           </Item>
-          <Item>
+          <Item style={{display: (item.status ===-1 ? '' : 'none')}}>
+            <span className="left">取消时间</span>
+            <span>{moment(item.cancelTime).format('YYYY-MM-DD HH:mm:ss')}</span>
+          </Item>
+          {/* <Item>
             <span className="left">服务满意度：</span>
             <span>{item.satisfaction}</span>
           </Item>
           <Item>
             <span className="left">服务评价：</span>
             <span>{item.evaluation}</span>
-          </Item>
+          </Item> */}
         </List>
       </Card>
 

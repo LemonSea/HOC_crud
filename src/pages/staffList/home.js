@@ -130,7 +130,7 @@ class StaffHome extends Component {
           onChange={(value) => { changeSearchType(value) }}
         >
           <Option value='name'>按名称搜索</Option>
-          <Option value='company'>按公司搜索</Option>
+          {/* <Option value='company'>按公司搜索</Option> */}
         </Select>
         <Input
           placeholder='关键字'
@@ -191,7 +191,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getList(pageNum, searchType, searchName, user) {
-    console.log( user.isHead)
+    // console.log( user.isHead )
     let _id = '';
     if(user.isHead){
       _id = user._id
