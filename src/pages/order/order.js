@@ -148,13 +148,15 @@ class order extends PureComponent {
       onOk: async () => {
         // message.success(this.state.item._id)
         // const result = await reqDelete(_id)
+        const result = await reqChangeOrder(_id, -1)
         console.log('_id', _id)
-        // if (result.status === 0) {
-        //   message.success('删除成功!');
-        //   this.props.getList(pageNum)
-        // } else {
-        //   message.warn('删除失败!');
-        // }
+        if (result.status === 0) {
+          message.success('取消成功!');
+          console.log(result)
+          this.props.getList(pageNum,'','', this.props.currentUser.toJS())
+        } else {
+          message.warn('取消失败!');
+        }
       },
       // onCancel() {
       //   console.log('Cancel');
@@ -239,7 +241,7 @@ class order extends PureComponent {
             // onClick={() => { this.setState({ showStatus: 2 }) }}
             onClick={() => this.delete(item._id, this.props.pageNum)}
             disabled={!item._id}
-          >删除订单</Button>
+          >取消订单</Button>
         </span>
         {/* <span>
           <Button

@@ -15,6 +15,7 @@ function Login(props) {
     const { postLoginDispatch } = props;
     // state to props
     const { loginStatus } = props;
+    console.log('render loginStatus',loginStatus)
 
     useEffect(() => {
         if (loginStatus > 1) {
